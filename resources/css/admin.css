@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Tangerine&family=Zen+Kaku+Gothic+New&display=swap');
+
+/* 
+font-family: 'Berkshire Swash', cursive;
+font-family: 'Tangerine', cursive;
+font-family: 'Zen Kaku Gothic New', sans-serif;
+*/
+.sidenav {
+            height: 100%;
+            width: 220px;
+            z-index: 1000;
+            position: fixed;
+           /*  padding: 20px; */
+            background-color: #9aa1bd;
+           
+        }
+
+        .userinfo {
+          padding: 10px;
+        color: rgb(54, 60, 71);
+          padding-top: 20px;
+          background-color: #9aa1bd;
+         display: block;
+         margin-top: 20px;
+         text-align: center;
+      
+        
+        
+        }
+    /*     .titlebar{
+            position: fixed;
+            background-color: white;
+        } */
+       
+     
+        .sidebar-heading {
+            margin-left: 10px;
+            color: gray;
+        }
+
+        .wrapper {
+            position: relative;
+
+        }
+
+        main {
+            margin-left: 220px;
+        }
+
+        .topbar {
+            position: fixed;
+            z-index: 999;
+            height: 40px;
+            width: 100%;
+            padding: 5px;
+            background-color: white;
+            
+        }
+
+
+        .main_contents {
+            padding: 10px;
+        }
+        .navigations li {
+         
+            padding: 5px 5px;
+            
+          
+            
+            color: rgb(51, 50, 50);
+        }
+        .navigations li:hover a i {
+        
+            animation: swing .6s;
+            
+
+        }
+        .navigations li:hover {
+            background-color: rgb(182, 205, 226);
+            
+        }
+        .navigations li a:focus {
+         
+            color: #1c2122;  
+            
+        }
+        .navigations li:hover a {
+            color:rgb(23, 51, 77);
+        }
+
+        .navitems  {
+           
+           
+            padding: 150px;
+
+        }
+        .navitems a{
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+         color: #1c2122;  
+         margin-left: 20px;
+         
+            
+        } 
+
+       /*  .navitems:hover a {
+            background-color: #283e46;
+            color: #c7d6da;
+
+        }
+ */
+      
+
+        #res {
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        #abtext {
+            position: absolute;
+            top: 10px;
+            right: 40px;
+            user-select: none;
+            color: #76aeee;
+            font-size:20px;
+            text-decoration: none;
+            background-color: rgb(233, 241, 247);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+
+        #canvas {
+            display: none;
+            color: rgb(78, 83, 90);
+            text-decoration: none;
+            padding: 5px;
+            padding-left: 25px;
+           font-size: 20px;
+        }
+        #canvas:hover{
+           color:rgb(89, 107, 141);
+        }
+
+        @media screen and (max-width:768px) {
+            .sidenav {
+                display: none;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            #canvas {
+                display: inline-block;
+                
+
+            }
+
+            #canvasitems {
+              background-color: #9aa1bd;
+             margin-top: -29px;
+            padding-left: 40px;
+             z-index: 0;
+           
+            }
+            .btn-close{
+                z-index: 1;
+            }
+            .userinfo #em {
+                position: absolute;
+                left:115px;
+                top: 100px;
+            }
+           
+        }
+
+        .dashboardbanner {
+            position:absolute;
+            right: 30px;
+            top: 20px;
+            color: rgb(189, 171, 171);
+            font-size: 36px;
+        }
+
+        .dashboardbanner:hover{
+            animation: swing .5s;
+        }
+
+
+        @keyframes swing {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            10% {
+                transform: rotate(10deg);
+            }
+
+            30% {
+                transform: rotate(0deg);
+            }
+
+            40% {
+                transform: rotate(-10deg);
+            }
+
+            50% {
+                transform: rotate(0deg);
+            }
+
+            60% {
+                transform: rotate(5deg);
+            }
+
+            70% {
+                transform: rotate(0deg);
+            }
+
+            80% {
+                transform: rotate(-5deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
