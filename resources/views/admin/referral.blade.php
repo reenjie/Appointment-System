@@ -121,6 +121,95 @@
             
                   <div class="card shadow mb-2">
                     <div class="card-body">
+
+                      <button style="float:right;text-decoration:none;font-size:13px" class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#medhistory">Referral History</button>
+
+
+                      <div class="modal fade" id="medhistory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                              <button type="button" style="float:right" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              <div class="badge mb-4 bg-primary" style="font-size: 15px" id="exampleModalLabel">Referral History</div>
+                              <div class="container">
+                                <table class="table table-striped table-sm ">
+                                  <thead>
+                                    <tr class="table-primary text-secondary">
+                                    <th>Date-Referred</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                   
+                      
+                                    <th>Remarks</th>
+                                
+                                    </tr>
+                                   
+                                  </thead>
+                                  <tbody>
+                               @foreach ($refhistory as $hist )
+                                
+                                    @if($hist->user_id == $row->user_id)
+                                    <tr style="font-size: 14px" >
+                                      <td>{{date("@h:ia F j,Y",strtotime($hist->created_at))}}</td>
+                                      <td style="font-style: italic" class="text-secondary">
+                                        Clinic : <br> 
+                                       <span class="text-dark" style="font-style:normal">
+                                        @foreach ($clinic as $item1)
+                                        @if($item1->id == $hist->from)
+                                          {{$item1->name}}
+                                        @endif
+                                      @endforeach
+                                       </span>
+                                        <br>
+                                       Referredby : <br>  
+                                       <span class="text-dark" style="font-style: normal">
+                                        Dr.
+                                        @foreach ($doctor as $item1)
+                                        @if($item1->id == $hist->fromdoctor)
+                                          {{$item1->firstname." ".$item1->lastname}}
+                                        @endif
+                                      @endforeach</span>
+                                      </td>
+                                      <td style="font-style: italic" class="text-secondary">
+                                        Clinic : <br> 
+                                       <span class="text-dark" style="font-style:normal">
+                                        @foreach ($clinic as $item1)
+                                        @if($item1->id == $hist->to)
+                                          {{$item1->name}}
+                                        @endif
+                                      @endforeach
+                                       </span>
+                                        <br>
+                                       Referredby : <br>  
+                                       <span class="text-dark" style="font-style: normal">
+                                        Dr.
+                                        @foreach ($doctor as $item1)
+                                        @if($item1->id == $hist->todoctor)
+                                          {{$item1->firstname." ".$item1->lastname}}
+                                        @endif
+                                      @endforeach</span>
+                                      </td>
+                                      <td> {{$hist->remarks}}
+                                      
+                                      </td>
+                                      
+                                    </tr>
+                      
+                                    @endif
+                                   
+                                
+                                    @endforeach 
+                                  </tbody>
+                                </table>
+                                
+                      
+                              </div>
+                      
+                            </div>
+                         
+                          </div>
+                        </div>
+                      </div>
                         
                 <h6 class="af" style="font-weight:bold">{{$patient->name}}</h6>  ( <span style="font-size:13px">{{$patient->email}} </span> )
                   <br>

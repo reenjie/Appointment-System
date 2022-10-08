@@ -8,6 +8,7 @@ use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\User;
 use App\Models\Appointment;
+use App\Models\Ref_history;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -115,13 +116,15 @@ class Edit_Controller extends Controller
        $doctor = $request->DoctorId;
        $clinic = $request->clinic;
 
-        Appointment::where('id',$id)->update([
+   
+   Appointment::where('id',$id)->update([
             'remarks'=> $remarks,
             'refferedto'=>$clinic,
             'refferedto_doctor'=>$doctor,
             'status' => 4,
         ]);
 
+      
 
         $appt = Appointment::where('id',$request->id)->get();
         $userid = $appt[0]['user_id'];
@@ -134,6 +137,18 @@ class Edit_Controller extends Controller
         $clinicdetails = Clinic::where('id',$clinic)->get();
         $clinicname = $clinicdetails[0]['name'];
         $cliniclocation =  $clinicdetails[0]['street'].' ,'.$clinicdetails[0]['barangay'].' '.$clinicdetails[0]['city'];
+        
+
+      
+      Ref_history::create([
+            "user_id" =>$userid ,
+            "from" => $appt[0]['clinic'] ,
+            "to" =>    $clinic ,
+            "fromdoctor" => $appt[0]['doctor']  ,
+            "todoctor" =>  $doctor ,
+            "remarks"=>$remarks,
+        ]);
+
 
         return redirect()->route('mail.notify_patient',['email'=>$email,'name'=>$name,'doa'=>$adate,'toa'=>$atime,'cname'=>$clinicname,'loc'=>$cliniclocation,'tp' =>'refered','remarks'=>$request->remarks,'treatment'=>$request->treatment]);
         

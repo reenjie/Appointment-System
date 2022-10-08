@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Feedback;
+use App\Models\Ref_history;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -38,10 +39,21 @@ class AdminController extends Controller
         $cli = Clinic::where('id',$id)->get();
         $clinicsName =  $cli[0]['name'];
         $data = Appointment::where('clinic',$id)->where('status',0)->get();
-        $Doctor = Doctor::where('clinic',$id)->get();
+      
+        $Doctor = Doctor::where('clinic',$id)->get();  
+        $completeappt = Appointment::where('status',3)->get();
+        $alldoctor = Doctor::all();
+        $allclinic = Clinic::all();
         $user = User::all();
         $tab = 'appointment';
-        return view('admin.appointment',compact('tab','data','Doctor','user','clinicsName'));
+
+        /* 
+          $completeappt = Appointment::where('status',3)->get();
+        $alldoctor = Doctor::all();
+        $allclinic = Clinic::all();
+        'completeappt','alldoctor','allclinic'
+        */
+        return view('admin.appointment',compact('tab','data','Doctor','user','clinicsName','completeappt','alldoctor','allclinic'));
     }
     public function patient(){
         $id = Auth::user()->clinic;
@@ -60,11 +72,12 @@ class AdminController extends Controller
         $doctor = Doctor::all();
         $user = User::all();
         $clinic = Clinic::all();
-
+        $refhistory = Ref_history::all();
         $appr_appointments = Appointment::where('status',1)->where('clinic',$id)->get();
         $referred = DB::select('select * from clinics where id in (select clinic from appointments where status=4 and refferedto ='.$id.' ) ');
         $tab = 'referral';
-        return view('admin.referral',compact('tab','data','user','doctor','clinic','referred','appr_appointments','clinicsName'));
+
+        return view('admin.referral',compact('tab','data','user','doctor','clinic','referred','appr_appointments','clinicsName','refhistory'));
     }
 
     public function category(){
@@ -124,7 +137,13 @@ class AdminController extends Controller
         $Doctor = Doctor::where('clinic',$id)->get();
         $user = User::all();
         $tab = 'appointment';
-        return view('admin.approve_appointment',compact('tab','data','Doctor','user','clinicsName'));
+       
+          $completeappt = Appointment::where('status',3)->get();
+        $alldoctor = Doctor::all();
+        $allclinic = Clinic::all();
+       
+      
+        return view('admin.approve_appointment',compact('tab','data','Doctor','user','clinicsName','completeappt','alldoctor','allclinic'));
       }
 
       public function completed(){
@@ -135,7 +154,13 @@ class AdminController extends Controller
         $Doctor = Doctor::where('clinic',$id)->get();
         $user = User::all();
         $tab = 'appointment';
-        return view('admin.completed_appointment',compact('tab','data','Doctor','user','clinicsName'));
+      
+          $completeappt = Appointment::where('status',3)->get();
+        $alldoctor = Doctor::all();
+        $allclinic = Clinic::all();
+       
+      
+        return view('admin.completed_appointment',compact('tab','data','Doctor','user','clinicsName', 'completeappt','alldoctor','allclinic'));
       }
 
       public function cancelled(){
@@ -146,7 +171,13 @@ class AdminController extends Controller
         $Doctor = Doctor::where('clinic',$id)->get();
         $user = User::all();
         $tab = 'appointment';
-        return view('admin.cancelled_appointment',compact('tab','data','Doctor','user','clinicsName'));
+    
+          $completeappt = Appointment::where('status',3)->get();
+        $alldoctor = Doctor::all();
+        $allclinic = Clinic::all();
+       
+      
+        return view('admin.cancelled_appointment',compact('tab','data','Doctor','user','clinicsName' ,'completeappt','alldoctor','allclinic'));
       }
 
       public function disapproved(){
@@ -157,7 +188,13 @@ class AdminController extends Controller
         $Doctor = Doctor::where('clinic',$id)->get();
         $user = User::all();
         $tab = 'appointment';
-        return view('admin.disapproved_appointment',compact('tab','data','Doctor','user','clinicsName'));
+       
+          $completeappt = Appointment::where('status',3)->get();
+        $alldoctor = Doctor::all();
+        $allclinic = Clinic::all();
+       
+        
+        return view('admin.disapproved_appointment',compact('tab','data','Doctor','user','clinicsName', 'completeappt','alldoctor','allclinic'));
       }
 
       public function refer(Request $request){

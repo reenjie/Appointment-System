@@ -114,6 +114,7 @@
 
         <div class="banner-2">
           <div class="auth">
+            
             @yield('content')
         </div>
         </div> 
