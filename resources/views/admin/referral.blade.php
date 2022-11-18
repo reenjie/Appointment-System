@@ -41,6 +41,7 @@
                       @if($appt->clinic == $referals->id)
                       <div class="card shadow mb-2">
                         <div class="card-body">
+                        
                       
                       @foreach ($doctor as $doc)
                       @if($doc->id == $appt->refferedto_doctor)
@@ -72,6 +73,19 @@
                           <h6 class="mt-3" style="font-size: 12px">REMARKS:</h6>
                           <span class="text-danger">{{$appt->remarks}}</span>
                           <br>
+                       
+                       @if($appt->attachedfile == null)
+                        <span style="font-size:12px">No attached File.</span>
+                         @else
+                         <div class="p-2">
+                          <span style="font-size: 12px;color:rgb(59, 58, 58)">Attached Medical Certificate </span>
+                          <br>
+                        <a href="{{asset('attachments/').'/'.$appt->attachedfile}}" target="_blank">
+                          <i class="fas fa-image"></i> {{$appt->attachedfile}}
+                        </a>
+                     
+                      </div>
+                         @endif 
                         </li>
                           
                           @endif

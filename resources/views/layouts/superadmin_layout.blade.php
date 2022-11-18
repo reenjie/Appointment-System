@@ -137,7 +137,7 @@
                     <li class="nav-item navitems" id="category">
                         <a class="nav-link navlinks  " href="{{ route('superadmin.category') }}">
                             <i class="fas fa-clipboard-list"></i>
-                            <span>Category</span></a>
+                            <span>Specialization</span></a>
                     </li>
 
                     <li class="nav-item navitems" id="doctors">

@@ -150,9 +150,19 @@ class Edit_Controller extends Controller
         ]);
 
 
-        return redirect()->route('mail.notify_patient',['email'=>$email,'name'=>$name,'doa'=>$adate,'toa'=>$atime,'cname'=>$clinicname,'loc'=>$cliniclocation,'tp' =>'refered','remarks'=>$request->remarks,'treatment'=>$request->treatment]);
+        $doc = Doctor::findorFail($doctor);
+        $doctorname = $doc->firstname." ".$doc->lastname;
+        $ReceivingUser = User::where('clinic',$clinic)->get();
+
+        $notify_receiver=$ReceivingUser[0]['email'];
+        $notify_name=$ReceivingUser[0]['name'];
         
-     /*    return redirect()->route('admin.referral')->with('Success','Patient  was referred Successfully!'); */
+        
+        echo $doctorname.$notify_receiver.$notify_name;
+
+        return redirect()->route('mail.notify_patient',['email'=>$email,'name'=>$name,'doa'=>$adate,'toa'=>$atime,'cname'=>$clinicname,'loc'=>$cliniclocation,'tp' =>'refered','remarks'=>$request->remarks,'treatment'=>$request->treatment,'doctorname'=>$doctorname,'receiver'=>$notify_receiver,'receivername'=>$notify_name]);
+        
+  
     }
 
     public function rebook(Request $request){

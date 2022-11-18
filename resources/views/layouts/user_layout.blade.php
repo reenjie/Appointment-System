@@ -110,21 +110,21 @@
  --}}
                     <!-- Heading -->
                     <div class="sidebar-heading text-dark " style="font-size: 10px">
-                        MANAGE
+                        MANAGE APPOINTMENT
                     </div>
 
                     <li class="nav-item navitems" id="book">
                         <a class="nav-link navlinks  " href="{{route('user.book')}}">
                                  
                             <i class="fas fa-book"></i>
-                            <span>Book Appointment</span></a>
+                            <span>Book </span></a>
                     </li>
 
                     <li class="nav-item navitems" id="view">
                         <a class="nav-link navlinks  " href="{{route('user.view_pending')}}">
                                  
                             <i class="fas fa-list-ul"></i>
-                            <span>View Appointment</span></a>
+                            <span>View </span></a>
                     </li>
 
 
@@ -132,7 +132,7 @@
                         <a class="nav-link navlinks  " href="{{route('user.cancel')}}">
                                  
                             <i class="fas fa-ban"></i>
-                            <span>Cancel Booking</span></a>
+                            <span>Cancel </span></a>
                     </li>
 
                     <li class="nav-item navitems" id="feedback">

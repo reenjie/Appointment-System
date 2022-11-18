@@ -38,7 +38,7 @@ class Delete_Controller extends Controller
     }
 
     public function delete_feedback(Request $request){
-        Feedback::where('id',$request->id)->delete();
+        Feedback::where('user_id',$request->id)->delete();
         return redirect()->back()->with('Success','Feedback  was Deleted Successfully!');
     }
     public function delete_appt(Request $request){

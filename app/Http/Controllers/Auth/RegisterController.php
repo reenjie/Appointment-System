@@ -77,6 +77,7 @@ class RegisterController extends Controller
             'user_type' => 'patient',
             'password' => Hash::make($data['password']),
             'fl'=>1,
+            'otp'=>0,
         ]);
     }
 }

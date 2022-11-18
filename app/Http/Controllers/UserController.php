@@ -46,6 +46,7 @@ class UserController extends Controller
                     'refferedto_doctor'=>0,
                     'remarks'=>'',
                     'treatment'=>'',
+                    'attachedfile'=>null,
                     'status'=> 0,
                 ]);
                 return view('user.dashboard',compact('tab'))->with('Success','Booked Successfully!');
@@ -145,6 +146,7 @@ class UserController extends Controller
             'refferedto_doctor'=>0,
             'remarks'=>'',
             'treatment'=>'',
+            'attachedfile'=>null,
             'status'=> 0,
         ]);
         return redirect()->route('user.book')->with('Success','Booked Successfully!'); 
@@ -154,9 +156,10 @@ class UserController extends Controller
     public function feedback(){
         $id = Auth::user()->id;
         $clinics = DB::Select('select * from clinics where id in (select clinic from appointments where user_id ='.$id.') ');
-        $data = Feedback::where('user_id',$id)->get();
+        $data = Feedback::where('user_id',$id)->orderBy("created_at", "desc")->get();
         $cl  = Clinic::all();
+        $allclinic = DB::select('select * from clinics where id in (select clinic from feedback where user_id = '.$id.' )');
         $tab = 'feedback';
-        return view('user.sendfeedback',compact('tab','clinics','data','cl'));
+        return view('user.sendfeedback',compact('tab','clinics','data','cl','allclinic'));
     }
 }

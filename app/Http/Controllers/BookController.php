@@ -128,6 +128,7 @@ class BookController extends Controller
          'treatment'=>$request->treatment,
        ]);
        return redirect()->route('mail.notify_patient',['email'=>$email,'name'=>$name,'doa'=>$adate,'toa'=>$atime,'cname'=>$clinicname,'loc'=>$cliniclocation,'tp' =>'completed','remarks'=>$request->remarks,'treatment'=>$request->treatment]);
+     
     /*    return redirect()->back()->with('Success','Appointment Completed Successfully. '); */
     }
 

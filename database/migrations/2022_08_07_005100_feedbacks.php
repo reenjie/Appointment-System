@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('user_id');
             $table->text('message');
             $table->integer('clinic');
+            $table->integer('from_user')->nullable();
+            $table->integer('from_clinic')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -32,6 +32,14 @@ Route::get('/', function () {
         session(['e_name'=>$medname]);
     }
 
+  
+    if(session()->has('onetimepin')){
+
+    }else {
+        session(['onetimepin'=> substr(number_format(time() * rand(),0,'',''),0,6)]);
+
+    }
+
     $doc = Doctor::all();
     $clinics = Clinic::all();
     return view('welcome',compact('doc','clinics'));
@@ -70,6 +78,15 @@ Route::controller(App\Http\Controllers\BookController::class)->group(function(){
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Validations
+Route::get('checkpoint', [App\Http\Controllers\HomeController::class, 'checkpoint'])->name('checkpoint');
+
+Route::post('/home', [App\Http\Controllers\HomeController::class, 'verify'])->name('verifyotp');
+
+
+
+
+
 
 Route::controller(App\Http\Controllers\AdminController::class)->group(function(){
     Route::prefix('Admin')->name('admin.')->group(function(){ 
@@ -77,7 +94,7 @@ Route::controller(App\Http\Controllers\AdminController::class)->group(function()
         Route::get('Dashboard','dashboard')->name('dashboard');
         Route::get('Appointments','appointment')->name('appointment');
         Route::get('Patients','patient')->name('patient');
-        Route::get('Category','category')->name('category');
+        Route::get('Specialization','category')->name('category');
         Route::get('Doctors','doctors')->name('doctors');
         Route::get('Referral_Station','referral')->name('referral');
         Route::get('Feedbacks','feedback')->name('feedback');
@@ -91,6 +108,9 @@ Route::controller(App\Http\Controllers\AdminController::class)->group(function()
         Route::get('Referrals/Refer/Patient','refer')->name('refer');
         Route::get('Accepting/Referral','accept_referral')->name('accept_referral');
 
+
+        Route::post('attachedfile','attachedfile')->name('attachedfile');
+        Route::get('removeAttachment','removeAttachment')->name('removeAttachment');
     
     });
 
@@ -233,6 +253,12 @@ Route::controller(App\Http\Controllers\MailController::class)->group(function(){
         Route::get('notify_patient','notify_patient')->name('notify_patient');
         Route::post('resetlink','resetlink')->name('resetlink');
         Route::post('resetpassword','resetpassword')->name('resetpassword');
+
+        Route::get('sendOTP','sendOTP')->name('sendOTP');
+
+        Route::get('NotifyAdminIfReferredsuccess','NotifyAdmin_ifReferedSuccessful')->name('NotifyAdminIfReferredsuccess');
+
+        Route::get('NotifyAdmin_ReceivedFeedback','NotifyAdmin_ReceivedFeedback')->name('NotifyAdmin_ReceivedFeedback');
     });
 
 

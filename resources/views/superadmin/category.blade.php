@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <div class="titlebar">
-            <h4 class="hf mb-3">Category</h4>
+            <h4 class="hf mb-3">Specialization</h4>
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div class="container">
@@ -40,7 +40,7 @@
                             <img src="https://th.bing.com/th/id/R.8812c95c88f1695fc150b00250c0726f?rik=X1%2bd95kcnnq%2bPg&riu=http%3a%2f%2fmedicsww.org%2fimages%2fno-data.png&ehk=18X%2b44lq6215cwtDSTcnUaYhiSRpOjPBK32mLyIomhs%3d&risl=&pid=ImgRaw&r=0" style="width: 360px" alt="">
                             <br>
                           
-                            No Selected Clinic. Select Clinic First to Manage Categories
+                            No Selected Clinic. Select Clinic First to Manage Specializations
 
                         </h6>
 
@@ -122,7 +122,7 @@
 <button type="button" style="float: right" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 <br><br>
 <h6 class="af">
-Update Category
+Update Specialization
 </h6>
 <input type="text" value="{{$row->name}}" name="category" class="form-control" required>
 <input type="hidden" name="id" value="{{$row->id}}">
@@ -151,8 +151,8 @@ Update Category
                             <h6 style="text-align: center">
                                 <img src="https://th.bing.com/th/id/R.8812c95c88f1695fc150b00250c0726f?rik=X1%2bd95kcnnq%2bPg&riu=http%3a%2f%2fmedicsww.org%2fimages%2fno-data.png&ehk=18X%2b44lq6215cwtDSTcnUaYhiSRpOjPBK32mLyIomhs%3d&risl=&pid=ImgRaw&r=0" style="width: 360px" alt="">
                                 <br>
-                                <button data-bs-toggle="modal" data-bs-target="#add" class="btn btn-dark btn-sm px-3 mb-2">Add Category</button><br>
-                                No Category Found in <span class="text-danger">{{$clinic_name}}</span>.
+                                <button data-bs-toggle="modal" data-bs-target="#add" class="btn btn-dark btn-sm px-3 mb-2">Add Specialization</button><br>
+                                No Specialization Found in <span class="text-danger">{{$clinic_name}}</span>.
 
                             </h6>
 
@@ -181,7 +181,7 @@ Update Category
 <button type="button" style="float: right" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 <br><br>
 <h6 class="af">
-Add Category
+Add Specialization
 </h6>
 <input type="text" name="category" class="form-control" required>
 @isset($clinic_id)

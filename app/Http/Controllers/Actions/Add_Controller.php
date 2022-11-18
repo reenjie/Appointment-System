@@ -82,8 +82,9 @@ class Add_Controller extends Controller
     }
 
     public function add_admin(Request $request){
-
+     
         $request->validate([
+            'Designation'=>'required',
             'Email' => 'required|unique:users',
             'Contact'=>'required',
             'Name' =>'required',
@@ -92,7 +93,7 @@ class Add_Controller extends Controller
         ]);
 
        
-        $default_password = Hash::make($request->input('Email'));
+        $default_password = Hash::make('admin_1234');
        User::create([
             'email'=>$request->input('Email'),
             'contactno'=>$request->input('Contact'),
@@ -102,10 +103,12 @@ class Add_Controller extends Controller
             'address'=>$request->input('Address'),
             'clinic'=>$request->input('Clinic'),
             'fl'=>0,
+            'otp'=>0,
+            'designation'=>$request->input('Designation'),
         ]);
 
         
-        return redirect()->route('mail.sendCredentials',['email'=>$request->input('Email'),'name'=>$request->input('Name')]);
+        return redirect()->route('mail.sendCredentials',['email'=>$request->input('Email'),'name'=>$request->input('Name'),'password'=>'admin_1234']);
 
 
 
@@ -131,6 +134,8 @@ class Add_Controller extends Controller
              'address'=>$request->input('Address'),
              'clinic'=>0,
              'fl'=>0,
+             'otp'=>0,
+             'designation'=>null,
          ]);
  
          
@@ -149,14 +154,45 @@ class Add_Controller extends Controller
       $userid = Auth::user()->id;
       $clinic = $request->input('selected');
       $message = $request->input('message');
-        
-      Feedback::create([
-        'user_id'=>$userid,
-        'message'=>$message,
-        'clinic'=>$clinic,
-      ]);
+      $from = $request->input('from');
 
-      return redirect()->route('user.feedback')->with('Sent','New Patient was Added Successfully!'); 
+      if($from == 'from_user'){
+
+        Feedback::create([
+            'user_id'=>$userid,
+            'message'=>$message,
+            'clinic'=>$clinic,
+            'from_user'=>1,
+            'from_clinic'=>0,
+          ]);
+          
+         $alluser = User::where('clinic',$clinic)->get();
+
+         $username  = User::findorFail($userid)->name;
+
+        foreach ($alluser as $key => $value) {
+            $all[]=$value->email;
+        }
+        return redirect()->route('mail.NotifyAdmin_ReceivedFeedback',['message'=>$message,'alluser'=>$all,'Username'=>$username]);
+
+      }else {
+        $userid = $request->input('userid');
+        $clinic = Auth::user()->clinic;
+
+        Feedback::create([
+            'user_id'=>$userid,
+            'message'=>$message,
+            'clinic'=>$clinic,
+            'from_user'=>0,
+            'from_clinic'=>1,
+          ]);
+
+          return redirect()->back(); 
+
+      }
+        
+  
+  
     }
 
 }

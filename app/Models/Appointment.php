@@ -20,6 +20,7 @@ class Appointment extends Model
         'refferedto_doctor',
         'remarks',
         'treatment',
+        'attachedfile',
         'status',
 
     ];

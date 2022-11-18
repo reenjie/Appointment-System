@@ -103,11 +103,15 @@ class AdminController extends Controller
     public function feedback(){
         $clinic_id = Auth::user()->clinic; 
         $user = User::all();
-        $cli = Clinic::where('id',$clinic_id)->get();
-        $clinicsName =  $cli[0]['name'];
-        $data = Feedback::where('clinic',$clinic_id)->get();
+        $cli = Clinic::findorFail($clinic_id);   
+        $clinicsName =  $cli->name;
+
+        $alluser = DB::select('select * from users where id in (select user_id from feedback where clinic = '.$clinic_id.' )');
+        $data = Feedback::where('clinic',$clinic_id)->orderBy("created_at", "desc")->get();
+
+
         $tab = 'feedback';
-        return view('admin.feedback',compact('tab','data','user','clinicsName'));
+        return view('admin.feedback',compact('tab','data','user','clinicsName','alluser'));
     }
 
     public function adddoctor(){
@@ -211,11 +215,12 @@ class AdminController extends Controller
             $remarks = $remarks;
         }
 
+        $appt_attachedfile = Appointment::findorFail($id)->attachedfile;
       
         $clinic = Clinic::all();
         $data = DB::select('select * from doctors where clinic != '.$clinicid.' ');
         $category = Category::all();
-         return view('admin.action.refer',compact('tab','id','remarks','data','clinic','category','userpatient','clinicsName'));
+         return view('admin.action.refer',compact('tab','id','remarks','data','clinic','category','userpatient','clinicsName','appt_attachedfile'));
       }
 
       public function accept_referral(Request $request){
@@ -246,5 +251,37 @@ class AdminController extends Controller
         }
         $tab = 'referral';
         return view('admin.action.accept_referral',compact('tab','data','clinicid','clinicname','category','doc','docname','doctor','user','id','clinicsName'));
+      }
+
+      public function attachedfile(Request $request){
+        $id = $request->input('apptid');
+        if($request->file('imgfile')){
+          $imageName = time().'.'.$request->file('imgfile')->getClientOriginalExtension();
+          $request->file('imgfile')->move(public_path('attachments'), $imageName);
+
+          Appointment::where('id',$id)->update([
+            'attachedfile' => $imageName,
+          ]);
+         
+          return redirect()->back();
+  
+        }
+      }
+
+      public function removeAttachment(Request $request){
+        $id = $request->id;
+
+        $appt_attachedfile = Appointment::findorFail($id);
+        $image_path =   public_path('attachments/' . $appt_attachedfile->attachedfile);
+        
+        if(file_exists($image_path)){
+          unlink($image_path);
+        }
+
+        Appointment::where('id',$id)->update([
+          'attachedfile' => null,
+        ]);
+        return redirect()->back();
+  
       }
 }

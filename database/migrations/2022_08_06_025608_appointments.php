@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('refferedto_doctor');
             $table->text('remarks');
             $table->text('treatment');
+            $table->text('attachedfile')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

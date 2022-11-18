@@ -10,6 +10,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class MailController extends Controller
 {
@@ -42,6 +43,7 @@ class MailController extends Controller
     public function sendcredentials(Request $request){
         $receiver = $request->email;
         $name = $request->name;
+        $pass = $request->password;
         $this->token = session()->get('token');
         $mail = new PHPMailer(true);
 
@@ -94,7 +96,7 @@ class MailController extends Controller
            
                    <h4>Email: <span style="font-weight:bold">'.$receiver.'</span>
                        <br>
-                       Password: <span style="font-weight:bold">'.$receiver.'</span>
+                       Password: <span style="font-weight:bold">'.$pass.'</span>
            
                    </h4>
            
@@ -218,7 +220,107 @@ class MailController extends Controller
     }
 
 
+    public function NotifyAdmin_ifReferedSuccessful(Request $request){
+       
+        $this->token = session()->get('token');
+        $mail = new PHPMailer(true);
 
+       try {
+           $mail->isSMTP();
+           $mail->SMTPDebug = SMTP::DEBUG_OFF;
+           $mail->Host = 'smtp.gmail.com';
+           $mail->Port = 465;
+           $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+           $mail->SMTPAuth = true;
+           $mail->AuthType = 'XOAUTH2';
+           $mail->setOAuth(
+               new OAuth(
+                   [
+                       'provider'          => $this->provider,
+                       'clientId'          => $this->client_id,
+                       'clientSecret'      => $this->client_secret,
+                       'refreshToken'      => $this->token,
+                       'userName'          => session()->get('email')
+                   ]
+               )
+           );
+
+           $mail->setFrom(session()->get('email'),session()->get('e_name'));
+           $mail->addAddress($request->receiver, $request->name);
+           $mail->Subject = 'NEW REFERRAL ALERT';
+           $mail->CharSet = PHPMailer::CHARSET_UTF8;
+           $body = '<!DOCTYPE html>
+           <html lang="en">
+           
+           <head>
+               <meta charset="UTF-8">
+               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+               <meta http-equiv="X-UA-Compatible" content="ie=edge">
+               <title></title>
+           </head>
+           
+           <body style="background-color: aquamarine; padding:10px;text-align:center">
+           <p><br><br><br></p>
+               <h3><a target="_blank" href="#">Medical Clinic</a></h3>
+           
+               <h3 style="color:rgb(14, 87, 136)">Hi Admin '.$request->name.' <br> Dr. '.$request->doctorname.' has received a Referral.
+           
+            
+                   </h3>
+                  
+                  
+                   <h4>
+
+                 
+                   <div style="padding:10px;">
+                   <span >Patient Information</span>
+                   <br>
+                   <span >
+                   Name : '.$request->patientname.'
+                   <br>
+                   Email : '.$request->patientemail.'
+                   
+                   </span>
+                   </div>
+                   </h6>
+                 
+
+                   <br>
+                   <span >
+                   Login To view more about the referral details.
+                   </span>
+                 
+
+
+                   <br>
+                   <h4>
+                  
+                   
+                       <br>
+                   
+                       All rights Reserved &middot; 2022
+           
+                   </h3>
+                   <p><br><br><br></p>
+           
+           </body>
+           
+           </html>
+           
+           ';
+           $mail->msgHTML($body);
+           $mail->AltBody = 'This is a plain text message body';
+           if( $mail->send() ) {
+            return redirect()->route('admin.referral')->with('Success','Patient  was referred Successfully!');
+           } else {
+              return redirect()->back()->with('error', 'Unable to send email.');
+           }
+       } catch(Exception $e) {
+           return redirect()->back()->with('error', 'Exception: ' . $e->getMessage());
+       }   
+    
+    
+    }
 
     
 
@@ -346,7 +448,10 @@ class MailController extends Controller
             }else if($request->tp == 'completed'){
                 return redirect()->back()->with('Success','Patient Booking Marked Done Successfully!'); 
             }else if($request->tp == 'refered'){
-                return redirect()->route('admin.referral')->with('Success','Patient  was referred Successfully!'); 
+         
+                 //    
+               return redirect()->route('mail.NotifyAdminIfReferredsuccess',['receiver'=>$request->receiver,'name'=>$request->receivername,'doctorname'=>$request->doctorname,'patientname'=>$name,'patientemail'=>$receiver]);
+                
             }
             else if($request->tp == 'rebook'){
                 return redirect()->route('admin.referral')->with('Success','Referral Accepted and Appointment was set Successfully!'); 
@@ -542,5 +647,180 @@ class MailController extends Controller
        } catch(Exception $e) {
            return redirect()->back()->with('error', 'Exception: ' . $e->getMessage());
        }   
+    }
+
+    public function sendOTP(Request $request){
+      
+       $this->token = session()->get('token');
+        $mail = new PHPMailer(true);
+
+       try {
+           $mail->isSMTP();
+           $mail->SMTPDebug = SMTP::DEBUG_OFF;
+           $mail->Host = 'smtp.gmail.com';
+           $mail->Port = 465;
+           $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+           $mail->SMTPAuth = true;
+           $mail->AuthType = 'XOAUTH2';
+           $mail->setOAuth(
+               new OAuth(
+                   [
+                       'provider'          => $this->provider,
+                       'clientId'          => $this->client_id,
+                       'clientSecret'      => $this->client_secret,
+                       'refreshToken'      => $this->token,
+                       'userName'          => session()->get('email')
+                   ]
+               )
+           );
+
+           $mail->setFrom(session()->get('email'),session()->get('e_name'));
+           $mail->addAddress(Auth::user()->email, Auth::user()->name);
+           $mail->Subject = 'ONE-TIME-PIN';
+           $mail->CharSet = PHPMailer::CHARSET_UTF8;
+           $body = '<!DOCTYPE html>
+           <html lang="en">
+           
+           <head>
+               <meta charset="UTF-8">
+               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+               <meta http-equiv="X-UA-Compatible" content="ie=edge">
+               <title></title>
+           </head>
+           
+           <body style="background-color: aquamarine;text-align:center">
+           <p><br><br><br></p>
+               <h2><a target="_blank" href="#">Medical Clinic</a></h2>
+           
+               <h3 style="color:rgb(14, 87, 136)">Hi '.Auth::user()->name.'!
+           
+            
+                   </h3>
+                   <h4>This is Your OTP ( One Time Pin ) <br> <span style="font-size:40px;color:#4f4f54">'.session()->get('onetimepin').'</span></h4>
+
+
+                   <br>
+                   <h5>
+                  
+                   
+                       <br>
+                    <span style="color:red">Please dont share this to anyone. | No one can access your account without this PIN.</span>
+                    <br/>
+                       All rights Reserved &middot; 2022
+           
+                   </h5>
+                   <p><br><br><br></p>
+           
+           </body>
+           
+           </html>
+           
+           ';
+           $mail->msgHTML($body);
+           $mail->AltBody = 'This is a plain text message body';
+           if( $mail->send() ) {
+            return view('otp'); 
+           } else {
+               return redirect()->back()->with('error', 'Unable to send email.');
+           }
+       } catch(Exception $e) {
+           return redirect()->back()->with('error', 'Exception: ' . $e->getMessage());
+       }   
+
+
+        //
+    }
+    public function NotifyAdmin_ReceivedFeedback(Request $request){
+      $message = $request->message;
+      $emails = $request->alluser;
+      $name   = $request->Username;
+
+      foreach ($emails as $key => $receiver) {
+      
+
+        $this->token = session()->get('token');
+        $mail = new PHPMailer(true);
+
+       try {
+           $mail->isSMTP();
+           $mail->SMTPDebug = SMTP::DEBUG_OFF;
+           $mail->Host = 'smtp.gmail.com';
+           $mail->Port = 465;
+           $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+           $mail->SMTPAuth = true;
+           $mail->AuthType = 'XOAUTH2';
+           $mail->setOAuth(
+               new OAuth(
+                   [
+                       'provider'          => $this->provider,
+                       'clientId'          => $this->client_id,
+                       'clientSecret'      => $this->client_secret,
+                       'refreshToken'      => $this->token,
+                       'userName'          => session()->get('email')
+                   ]
+               )
+           );
+
+           $mail->setFrom(session()->get('email'),session()->get('e_name'));
+           $mail->addAddress($receiver,'Admin');
+           $mail->Subject = 'RECEIVED PATIENT FEEDBACKS';
+           $mail->CharSet = PHPMailer::CHARSET_UTF8;
+           $body = '<!DOCTYPE html>
+           <html lang="en">
+           
+           <head>
+               <meta charset="UTF-8">
+               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+               <meta http-equiv="X-UA-Compatible" content="ie=edge">
+               <title></title>
+           </head>
+           
+           <body style="background-color: aquamarine;text-align:center">
+           <p><br><br><br></p>
+               <h2><a target="_blank" href="#">Medical Clinic</a></h2>
+           
+               <h3 style="color:rgb(14, 87, 136)">
+                    We Have Received a Patient Feedback!
+            
+                   </h3>
+                   <h4>From Patient : <br>
+                   <span style="font-weight:bold">'.$name.'</span>
+                   </h4>
+                  
+                       
+
+                   <br>
+                 <span style="font-weight:bold;font-size:11px">Message</span>   :  '.$message.'
+                  
+                  
+                   <h5>
+                  
+                   
+                       <br>
+                    <span style="color:green">Login your account If you wish to response. </span>
+                    <br/>
+                       All rights Reserved &middot; 2022
+           
+                   </h5>
+                   <p><br><br><br></p>
+           
+           </body>
+           
+           </html>
+           
+           ';
+           $mail->msgHTML($body);
+           $mail->AltBody = 'This is a plain text message body';
+           if( $mail->send() ) {
+            
+           } else {
+               return redirect()->back()->with('error', 'Unable to send email.');
+           }
+       } catch(Exception $e) {
+           return redirect()->back()->with('error', 'Exception: ' . $e->getMessage());
+       }   
+
+      }
+      return redirect()->back(); 
     }
 }

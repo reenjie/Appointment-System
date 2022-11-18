@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <div class="titlebar">
-            <h4 class="hf mb-3">Category</h4>
+            <h4 class="hf mb-3">Specialization</h4>
             
 
         </div>
@@ -10,7 +10,7 @@
         <div class="card shadow-sm">
             <div class="card-body">
                         <div class="container " id="tablebelow">
-                                    <button data-bs-toggle="modal" data-bs-target="#add" class="btn btn-dark btn-sm px-3 mb-2">Add</button>
+                                    {{-- <button data-bs-toggle="modal" data-bs-target="#add" class="btn btn-dark btn-sm px-3 mb-2">Add</button> --}}
                             <!-- Button trigger modal -->
 
   <!-- Modal -->
@@ -57,7 +57,7 @@
                                                 <th scope="col">Date-Created</th>
                                                 <th scope="col">Status</th>
                                             
-                                                <th scope="col">Action</th>
+                                                {{-- <th scope="col">Action</th> --}}
                                               </tr>
                                             </thead>
                                             <tbody>
@@ -85,12 +85,12 @@
                                                     </td>
                                                   
                                                  
-                                                    <td>
+                                                    {{-- <td>
                                                         <div class="btn-group">
                                                             <button data-bs-toggle="modal" data-bs-target="#edit{{$row->id}}" class="btn btn-light btn-sm text-success"><i class="fas fa-edit"></i></button>
                      <button class="btn btn-light btn-sm text-danger btndelete" data-id="{{$row->id}}"><i class="fas fa-trash-can"></i></button>
                                                         </div>
-                                                    </td>
+                                                    </td> --}}
                                                   </tr>
                                                     
 

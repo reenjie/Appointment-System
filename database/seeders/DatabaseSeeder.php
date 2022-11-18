@@ -35,6 +35,8 @@ class DatabaseSeeder extends Seeder
             'contactno'=>'00000',
             'user_type' =>'superadmin',
             'fl'=>0,
+            'otp'=>0,
+            'designation'=>'admin',
              ]);
 
         Email::create([

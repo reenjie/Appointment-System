@@ -101,7 +101,17 @@
                         <a href="{{route('admin.referral')}}" class="btn btn-light btn-sm">View All</a>
                     </div>
                 </div>
-                    
+                   @else
+                    <div class="card shadow mb-2 p-4 d-flex  " >
+                        <div class="justify-content-center">
+                            <div style="display: flex">
+                                <img src="{{asset('img/notfound.svg')}}" style="width: 250px" alt="">
+                                <h6 class="mt-10 " style="font-weight: bold;margin-top:100px;margin-left:40px">No Referrals Found ..</h6>
+
+                            </div>
+                           
+                        </div>
+                    </div>
                 @endif
               
 
@@ -130,14 +140,7 @@
                         </a>
                         @endif
                     @endforeach
-                   {{--  <a href="#" class="list-group-item list-group-item-action list-group-item-primary af">
-                        Doc . WIllie Ong
-
-                        <span class="badge text-bg-primary" style="float: right">Available</span>
-
-                    </a>
                 
-                    --}}
                 
                   </div>
 
@@ -189,7 +192,7 @@
   
      
 
-    <script>
+    {{-- <script>
         window.onload = function () {
         
         var chart = new CanvasJS.Chart("chartContainer", {
@@ -225,5 +228,5 @@
         chart.render();
         
         }
-        </script>
+        </script> --}}
 @endsection

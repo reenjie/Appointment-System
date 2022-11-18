@@ -55,7 +55,7 @@
  @foreach ($data as $row)
                 <div class="card shadow mb-2 searchfilter">
                     <div class="card-header">
-                       <h6  style="font-size:12px"><span>Patient Transaction# {{$row->id}}</span></h6> 
+                       <h6  style="font-size:12px"><span>Patient Transaction# {{$row->id}} </span></h6> 
                     </div>
                     <div class="card-body">
 
@@ -82,6 +82,55 @@
                                 @endforeach
                                 </h6>
                                 <br>
+                                <h6 style="font-weight: normal;font-size:12px" class="af mb-2">Medical Certificate</h6>
+                               
+                         @if($row->attachedfile == null)
+
+                            
+<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#fileattach{{$row->id}}" style="font-size:14px">
+Attach file
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="fileattach{{$row->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title fs-5" id="exampleModalLabel"></h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{route('admin.attachedfile')}}" method="post" enctype="multipart/form-data">
+        @csrf
+      <div class="modal-body">
+      
+        <input type="file" name="imgfile" required accept="image/*" data-id="{{$row->id}}" class="onUpload form-control" style="font-size:14px"/>
+        <input type="hidden" value="{{$row->id}}" name="apptid">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary btn-sm">Upload</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+@else
+<div class="p-2">
+  <a href="{{asset('attachments/').'/'.$row->attachedfile}}" target="_blank">
+    <i class="fas fa-image"></i> {{$row->attachedfile}}
+  </a>
+
+  <button class="clearattach" data-id="{{$row->id}}" style="float: right;font-size:14px;color:rgb(204, 28, 28);outline:none;border:none"> remove</button>
+</div>
+
+
+
+@endif
+                                {{--  --}}
+                              
+                                <br>
+                               
                                 <h6 style="font-weight: normal;font-size:12px" class="af">Add Treatment Data</h6>
                                 <textarea name="" id="{{$row->id}}treatment" style="resize: none" class="rem form-control" id="" cols="5" rows="5" placeholder="Type Treatment here."></textarea>
                                 
@@ -266,6 +315,24 @@
    
    </div>
    <script>
+$('.clearattach').click(function(){
+  var id = $(this).data('id');
+  swal({
+  title: "Are you sure?",
+  text: "Once deleted, you will not be able to recover this image file!",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    window.location.href="{{route('admin.removeAttachment')}}"+'?id='+id;
+  } 
+});
+
+
+})
+
  $('#searchkey').keyup(function(){
       var val = $(this).val();
 

@@ -10,7 +10,7 @@
         <div class="card shadow-sm">
             <div class="card-body">
            <div class="container">
-            <button class="btn btn-dark btn-sm px-3 mb-2" onclick="window.location.href='{{route('admin.adddoctor')}}' ">Add</button>
+            {{-- <button class="btn btn-dark btn-sm px-3 mb-2" onclick="window.location.href='{{route('admin.adddoctor')}}' ">Add</button> --}}
 
             @if(Session::get('Success'))
             <div class="row">
@@ -33,7 +33,7 @@
                         <th scope="col">Email & Contact No</th>
                         <th scope="col">Status</th>
                         <th scope="col">Date-added</th>
-                        <th scope="col">Action</th>
+                        {{-- <th scope="col">Action</th> --}}
                       </tr>
                     </thead>
                     <tbody>
@@ -67,13 +67,13 @@
                           
                             <td>{{Date('h:ia F j,Y',strtotime($row->created_at))}}</td>
                           
-                            <td>
+                            {{-- <td>
                                 <div class="btn-group">
                                  
                                     <button class="btn btn-light btn-sm text-success" onclick="window.location.href='{{route('admin.edit_doctor',$row->id)}}' "><i class="fas fa-edit"></i></button>
                                     <button data-id="{{$row->id}}" class="btndelete btn btn-light btn-sm text-danger"><i class="fas fa-trash-can"></i></button>
                                 </div>
-                            </td>
+                            </td> --}}
                           </tr>
                             
                         @endforeach
