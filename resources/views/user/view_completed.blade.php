@@ -71,6 +71,25 @@
                                                    @endforeach
                                                 
 
+                                                   <br>
+                                                   <br>
+                                                   Clinic Information
+                                                   <br>
+                                                   <span style="color:gray">
+                                                
+
+                                                    @php
+                                                        $cl = DB::select('select * from clinics where id = '.$row->clinic.' ');
+                                                    @endphp
+                                                    @foreach ($cl as $item)
+                                                       <span class="text-primary">
+                                                        {{$item->name}}    
+                                                    </span> 
+                                                    <br>
+                                                    <span style="font-size: 12px">{{$item->street.' '.$item->barangay.' '.$item->city}}</span>
+                                                    @endforeach
+                                                   </span>
+                                                    <br>
                                                   
                                                </h6>
                                              

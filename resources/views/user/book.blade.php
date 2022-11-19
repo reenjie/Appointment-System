@@ -8,6 +8,11 @@
         <div class="row">
           
             <div class="col-md-8">
+              @if(Session()->has('cannotbe'))
+              <div class="alert alert-danger">
+                {{Session()->get('cannotbe')}}
+              </div>
+              @endif
               <form method ="post" action="{{route('user.submit')}}" id="booknow">
                 @csrf
                 
@@ -22,7 +27,7 @@
                     $date = date('Y-m-d');
                 @endphp
 
-               <input type="date" id="dop" name="dateofappointment" class="authbox mb-2 form-control" placeholder="" value="{{old('dateofappointment')}}" autofocus required min="{{date('Y-m-d',strtotime(date("Y-m-d", strtotime($date)) . " +1 day"))}}" >
+               <input type="date" id="dop" name="dateofappointment" class="authbox mb-2 @error('dateofappointment') is-invalid  @enderror form-control" placeholder="" value="{{old('dateofappointment')}}" autofocus required min="{{date('Y-m-d',strtotime(date("Y-m-d", strtotime($date)) . " +1 day"))}}" >
 
                <div class="invalid-feedback">
                 <span style="font-size:12px">Please Provide Date or the Date you have entered is already reserved</span>
@@ -30,8 +35,11 @@
                      </div>
                      <div class="col-md-6">
                         <label for="">Time :</label>
-                        <input type="time" name="timeofappointment" class="authbox form-control" placeholder="" value="{{old('timeofappointment')}}" required>
+                        <input type="time" name="timeofappointment" class="authbox @error('timeofappointment') is-invalid @enderror form-control" placeholder="" value="{{old('timeofappointment')}}" required>
 
+                        <div class="invalid-feedback">
+                          <span style="font-size:12px">Please Provide Time or the Time you have entered is already reserved</span>
+                         </div>
             </div>
 
                         <div class="col-md-6">

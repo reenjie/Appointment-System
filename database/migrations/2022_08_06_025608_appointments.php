@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('dateofappointment');
             $table->time('timeofappointment');
             $table->integer('status');
+            $table->integer('ad_status');
             $table->integer('refferedto');
             $table->integer('refferedto_doctor');
             $table->text('remarks');

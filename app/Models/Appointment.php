@@ -22,6 +22,7 @@ class Appointment extends Model
         'treatment',
         'attachedfile',
         'status',
+        'ad_status',
 
     ];
 }

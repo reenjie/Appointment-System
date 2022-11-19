@@ -74,7 +74,7 @@ class AdminController extends Controller
         $clinic = Clinic::all();
         $refhistory = Ref_history::all();
         $appr_appointments = Appointment::where('status',1)->where('clinic',$id)->get();
-        $referred = DB::select('select * from clinics where id in (select clinic from appointments where status=4 and refferedto ='.$id.' ) ');
+        $referred = DB::select('select * from clinics where id in (select clinic from appointments where status=4 and refferedto ='.$id.' and ad_status= 0  ) ');
         $tab = 'referral';
 
         return view('admin.referral',compact('tab','data','user','doctor','clinic','referred','appr_appointments','clinicsName','refhistory'));

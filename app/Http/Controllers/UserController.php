@@ -48,6 +48,7 @@ class UserController extends Controller
                     'treatment'=>'',
                     'attachedfile'=>null,
                     'status'=> 0,
+                    'ad_status'=>0,
                 ]);
                 return view('user.dashboard',compact('tab'))->with('Success','Booked Successfully!');
 
@@ -132,9 +133,34 @@ class UserController extends Controller
             'Clinic' => 'required',
             'Category' =>'required',
             'Doctor' => 'required',
-            
+           
         ]);
+
       
+
+        $clinic = $request->input('Clinic');
+        $category = $request->input('Category');
+        $doctor = $request->input('Doctor');
+        $doa=$request->input('dateofappointment');
+        $toa = $request->input('timeofappointment');
+       
+        $clinicname = Clinic::findorFail($clinic)->name;
+       
+        $qry = DB::select('
+        select * from appointments 
+        where 
+        clinic ='.$clinic.' 
+        and category = '.$category.' 
+        and doctor = '.$doctor.' 
+        and dateofappointment = "'.$doa.'" 
+        and "'.$toa.'" BETWEEN timeofappointment and ADDTIME(timeofappointment, "1:00")');
+        
+       
+       
+      if(count($qry)>=1){
+       return redirect()->back()->with('cannotbe','The Date : '.$doa.' and  Time Schedule : '.$toa.' ,  has already been reserved at '.$clinicname.' . please Select Another Date or Time.');
+      }else{
+          
         Appointment::create([
             'user_id'=> Auth::user()->id,
             'clinic'=> $request->input('Clinic'),
@@ -148,8 +174,11 @@ class UserController extends Controller
             'treatment'=>'',
             'attachedfile'=>null,
             'status'=> 0,
+            'ad_status'=>0,
         ]);
         return redirect()->route('user.book')->with('Success','Booked Successfully!'); 
+      }
+    
 
     }
 

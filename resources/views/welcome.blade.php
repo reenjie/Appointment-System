@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Medical CLinic</title>
+    <title>Medical Clinic</title>
 
     <!-- Fonts -->
     @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/css/home.css', '../../node_modules/bootstrap/dist/css/bootstrap.css', '../../node_modules/bootstrap/dist/js/bootstrap.bundle.js'])

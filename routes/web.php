@@ -206,6 +206,8 @@ Route::controller(App\Http\Controllers\Actions\Edit_Controller::class)->group(fu
         Route::get('Account','account')->name('account');
         Route::post('updateaccount','updateaccount')->name('updateaccount');
         Route::get('firslogin','firslogin')->name('firslogin');
+
+        Route::get('accept_newSchedule','accept_newSchedule')->name('accept_newSchedule');
     });
 
 

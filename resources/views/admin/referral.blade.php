@@ -50,7 +50,12 @@
                       <span style="font-weight:bold" class="text-primary">     Dr.  {{$doc->firstname.' '.$doc->lastname}}</span>
 
                     
-                      <button data-id="{{$appt->id}}" data-ref ="{{$appt->refferedto_doctor}}" data-patient="{{$appt->user_id}}" class="btnaccept btn btn-primary btn-sm" style="float: right">Accept</button>
+                  <div class="btn-group" style="float: right">
+                    <button data-id="{{$appt->id}}" data-ref ="{{$appt->refferedto_doctor}}" data-patient="{{$appt->user_id}}" class="btnaccept btn btn-primary btn-sm" >Accept</button>
+
+                      
+                    <button data-id="{{$appt->id}}" class="btncancel btn btn-danger btn-sm">Decline</button>
+                  </div>
                     </li>
                         @endif
                       @if($doc->id == $appt->doctor)
@@ -289,6 +294,48 @@
        }else {
         window.location.href='{{route("admin.refer")}}'+'?id='+id+'&remarks='+val+'&patientId='+pid;
        } 
+    })
+
+
+
+    $('.btncancel').click(function(){
+        var id =$(this).data('id');
+
+        swal("Please Write a Remarks or Reason of Declining Referral:", {
+  content: "input",
+  icon: "warning",
+  dangerMode: true,
+})
+.then((value) => {
+ if(value == ''){
+    swal({
+  title: "Remarks Required!",
+  text: "Please provide a Remarks to inform the patient.",
+  icon: "error",
+  button: "Close",
+  dangerMode: true,
+});
+ }else {
+    $(this).removeClass('btn-primary').addClass('btn-light').html('<span class="text-danger" style="font-size:12px">Declining..</span>'); 
+   window.location.href='{{route("home.disapprove_booking")}}'+'?id='+id+'&remarks='+value;
+ }
+});
+       
+     /*    swal({
+  title: "Are you sure to Disapproved this Booking? ",
+  text: "Patient can still resend the request after 1 day of disapproval",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    $(this).removeClass('btn-primary').addClass('btn-light').html('<span class="text-danger" style="font-size:12px">Disapproving..</span>'); 
+   window.location.href='{{route("home.disapprove_booking")}}'+'?id='+id;
+  } else {
+  
+  }
+}); */
     })
 </script>
 @endsection

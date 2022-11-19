@@ -173,17 +173,24 @@ class Edit_Controller extends Controller
         $top = $request->input('timeofappointment');
         $dop = $request->input('dateofappointment');
 
+        // Appointment::where('id',$id)->update([
+        //     'clinic'=>$clinic,
+        //     'category'=>$category,
+        //     'doctor'=>$doctor,
+        //     'dateofappointment'=>$dop,
+        //     'timeofappointment'=>$top,
+        //     'status'=>1,
+        //     'refferedto'=>0,
+        //     'refferedto_doctor'=>0,
+        //     'remarks'=>'',
+        // ]);
+
         Appointment::where('id',$id)->update([
-            'clinic'=>$clinic,
-            'category'=>$category,
-            'doctor'=>$doctor,
-            'dateofappointment'=>$dop,
-            'timeofappointment'=>$top,
-            'status'=>1,
-            'refferedto'=>0,
-            'refferedto_doctor'=>0,
-            'remarks'=>'',
+        'dateofappointment'=>$dop,
+        'timeofappointment'=>$top,
+         'ad_status'=>1,
         ]);
+        //status = 1
 
         $appt = Appointment::where('id',$id)->get();
         $userid = $appt[0]['user_id'];
@@ -201,6 +208,28 @@ class Edit_Controller extends Controller
 
 
       /*   */
+       
+    }
+
+    public function accept_newSchedule(Request $request){
+        $id = $request->id;
+        $doctorid = $request->doctor;
+        $clinicid = $request->clinic;
+        $specialization = Doctor::findorFail($doctorid)->category;
+
+         Appointment::where('id',$id)->update([
+            'clinic'=>$clinicid,
+            'category'=>$specialization,
+            'doctor'=>$doctorid,
+            'status'=>1,
+            'ad_status'=>0,
+            'refferedto'=>0,
+            'refferedto_doctor'=>0,
+            'remarks'=>'',
+        ]);
+
+        return redirect()->route("user.dashboard")->with('accept','Appointment Accepted Successfully');
+        
        
     }
 

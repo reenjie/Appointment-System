@@ -23,6 +23,12 @@
             </script>
         @endif
 
+        @if(Session::has('accept'))
+        <script>
+            swal("Accepted!", "Appointment Accepted successfully!", "success")
+        </script>
+        @endif
+
         <h5>Booking Updates:</h5>
         <div class="row">
 
@@ -143,7 +149,43 @@
                             @if ($appt->clinic == $row->id)
                                 <div class="card shadow mb-2 mt-2 border-danger">
                                     <div class="card-body">
-                                        <h4 class="text-danger">You have been Referred to :</h4>
+                                        <h4 class="text-danger">You have been Referred!</h4>
+                                        
+                                        @if($appt->ad_status == 1)
+                                        <div class="card mb-2 shadow">
+                                            <div class="card-header">
+                                                <h6>
+                                             <span class="text-success" style="font-size:12px">
+                                                Referral Accepted
+                                             </span>
+                                             <br>
+                                                    Appointment Rescheduled</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                Date : {{date('F j, Y',strtotime($appt->dateofappointment))}}
+
+                                                <br>
+                                                Time : {{date('h:i a',strtotime($appt->timeofappointment))}}
+
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="btn-group">
+                                            
+
+                                                    <button data-id="{{$appt->id}}" data-ref="{{$appt->refferedto_doctor}}" data-patient="{{$appt->user_id}}"
+                                                        data-refclinic="{{$appt->refferedto}}"
+                                                        class="btnaccept btn btn-primary btn-sm" >Accept</button>
+
+                  
+                                                    <button data-id="{{$appt->id}}" class="btncancel btn btn-danger btn-sm">Decline</button>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                             
+                                        <h6 class="mt-2">Other Info :</h6>
+                                        @endif
                                         <h5 class="text-primary" style="text-transform: uppercase">
 
                                             <span style="font-size:13px" class="text-dark">Clinic <br> From:</span>
@@ -182,6 +224,7 @@
                                                         <br>
                                                         <span class="badge bg-warning mt-5 ">Pending</span>
                                                     </h6>
+
                                             @endif
                                         @endforeach
                                     </div>
@@ -249,6 +292,72 @@
 
         </div>
     </div>
+
+    <script>
+
+        $('.btnaccept').click(function(){
+
+            var id = $(this).data('id');
+            var refdoctor = $(this).data('ref');
+            var refclinic = $(this).data('refclinic');
+          
+           swal({
+  title: "Are you sure?",
+  text: "Once accepted, they will be expecting you on this date and time stated.",
+  icon: "info",
+  buttons: true,
+  dangerMode: false,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    window.location.href='{{route("edit.accept_newSchedule")}}'+'?id='+id+'&doctor='+refdoctor+"&clinic="+refclinic;
+  } 
+});
+         //   alert('aww');
+        })
+        
+    $('.btncancel').click(function(){
+        var id =$(this).data('id');
+
+        swal("Please Write a Remarks or Reason of Declining Your Appointment:", {
+  content: "input",
+  icon: "warning",
+  dangerMode: true,
+})
+.then((value) => {
+ if(value == ''){
+    swal({
+  title: "Remarks Required!",
+  text: "Please provide a Remarks or Reason of Declining.",
+  icon: "error",
+  button: "Close",
+  dangerMode: true,
+});
+ }else {
+    $(this).removeClass('btn-primary').addClass('btn-light').html('<span class="text-danger" style="font-size:12px">Declining..</span>'); 
+   window.location.href='{{route("edit.cancel_appointment")}}'+'?id='+id+'&remarks='+value;
+
+  
+ }
+});
+       
+     /*    swal({
+  title: "Are you sure to Disapproved this Booking? ",
+  text: "Patient can still resend the request after 1 day of disapproval",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    $(this).removeClass('btn-primary').addClass('btn-light').html('<span class="text-danger" style="font-size:12px">Disapproving..</span>'); 
+   window.location.href='{{route("home.disapprove_booking")}}'+'?id='+id;
+  } else {
+  
+  }
+}); */
+    })
+    </script>
 
     <script>
         window.onload = function() {
