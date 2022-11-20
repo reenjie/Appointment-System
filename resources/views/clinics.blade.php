@@ -129,54 +129,35 @@
                                     Book Now
                                 </button>
 
-                                <button 
-                                onclick="window.location.href='AboutUs'" class="btninfo">
+                                <button onclick="window.location.href='AboutUs'" class="btninfo">
                                  About Us
                                 </button>
                             </div>
                            
                         </div>
-                        <div class="col-md-6">
-                            <div class="container">
-                                <div class=" p-5" style="margin-top: 120px">
-                               
-                                   
-                                    <div class="card-body">
-                                        @if(Session::has('book'))
-                                        <h6 class="text-secondary">
-                                            Please Login to Submit Booking.
-                                        </h6>
-                                        @endif
-                                        <form method="POST" action="{{ route('login') }}" autocomplete="off">
-                                            @csrf
-                                        <h6 style="font-weight: bold;color:rgb(113, 113, 235)">Sign-In</h6>
-                                        <div class="container mt-4">
-                                            <h6 style="font-size:15px;">Email:</h6>
-                                            <input required type="text"
-                                            style="font-size:14px" class="form-control @error('email') is-invalid @enderror mb-2" autofocus name="email" value="{{ old('email') }}">
-                                            @error('email')
-                                            <span style="font-size:12px" class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                            <h6 style="font-size:15px">Password:</h6>
-                                            <input required  style="font-size:14px"  type="password" class="form-control @error('password') is-invalid @enderror" name="password" >
-
-                                            @error('password')
-                                            <span style="font-size:12px" class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                            <br>
-                                            <a href="{{ route('password.request') }}" class="mt-5" style="text-decoration: none;font-size:14px">Forgot Password?</a>
-                                            <button class="mt-3 py-2 mb-4 form-control btn btn-primary">Login</button>
-
-                                            <a href="{{route('register')}}" class="mt-5" style="text-decoration: none;font-size:14px">Register Here</a>
+                        <div class="col-md-6" style="margin-top: 120px;">
+                                        <h3 style="font-weight:bold;color:rgb(78, 142, 226)">LIST OF CLINICS</h3>
+                            <div class="container reveal" >
+                              
+                                      
                                      
-                                        </div>
-                                    </form>
-                                    </div>
-                                </div>     
+                                            @if(count($clinics)>=1)                                                                  @foreach ($clinics as $item)
+                                               <div class="card mb-2 shadow">
+                                                                                <div class="card-body">
+                                                                                                                        <h5 style="font-weight: bold;color:coral">{{$item->name}}</h5>
+                                                                                                                        <br>
+                                                                                                                        <span style="font-size: 13px">Address : <br>
+                                                                                                                        
+                                       <span style="color:gray;font-size:14px">
+                                        {{$item->street.' '.$item->barangay.' '.$item->city}}            </span>                                                                    </span>
+                                                                                                                        </div></div>                                            
+                                                                                                                        @endforeach
+                                        @else
+                                        No Doctors FOund
+                                                                                                                        @endif
+                                      
+
+                                        
                             </div>
                       
 
@@ -194,16 +175,7 @@
        
                
         <br><br>
-    <footer class="">
-         
-        <h6 class="" style="text-align:center ;color:rgb(69, 77, 117);font-size:14px">
-            All rights Reserved &middot; 2022
-    
-    
-        </h6>
-    
-    
-    </footer>
+
 
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">

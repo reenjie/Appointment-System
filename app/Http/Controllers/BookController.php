@@ -17,8 +17,8 @@ class BookController extends Controller
         $id=  $request->sortby;
         $category = DB::select('select * from categories where id in (select category from doctors where clinic = '.$id.' ) ');
 
-        echo '<select name="Category" class="authbox form-select" id="categories" >';
-            echo '<option>Choose Category</option>';
+        echo '<select name="Category" class=" form-select" id="categories" >';
+            echo '<option>Choose Specialization</option>';
         foreach($category as $item){
             echo '<option value="'.$item->id.'">'.$item->name.'</option>';
         }
@@ -34,7 +34,7 @@ class BookController extends Controller
         $id =  $request->sortby;
         $doctor = Doctor::where('category',$id)->get();
 
-        echo '<select name="Doctor" class="authbox form-select" id="" >';
+        echo '<select name="Doctor" class=" form-select" id="" >';
            echo '<option value="">Choose Doctor</option>';
         foreach($doctor as $item){
             echo '<option value="'.$item->id.'">'.$item->firstname.' '.$item->lastname.'</option>';
@@ -53,10 +53,36 @@ class BookController extends Controller
         
         $data =  $request->all();
 
-        session(['book'=>$data]);
+        $clinic = $request->input('Clinic');
+        $category = $request->input('Category');
+        $doctor = $request->input('Doctor');
+        $doa=$request->input('dateofappointment');
+        $toa = $request->input('timeofappointment');
 
-           return redirect()->route('login');
+        
+        $qry = DB::select('
+        select * from appointments 
+        where 
+        clinic ='.$clinic.' 
+        and category = '.$category.' 
+        and doctor = '.$doctor.' 
+        and dateofappointment = "'.$doa.'" 
+        and "'.$toa.'" BETWEEN timeofappointment and ADDTIME(timeofappointment, "1:00")');
 
+        $clinicname = Clinic::findorFail($clinic)->name;
+
+        if(count($qry)){
+         return redirect()->back()->with('cannotbe','The Date : '.$doa.' and  Time Schedule : '.$toa.' ,  has already been reserved at '.$clinicname.' . please Select Another Date or Time.');
+        }else {
+           session(['book'=>$data]);
+
+          return redirect('../');
+
+        }
+
+
+      
+    
      }
 
      public function disapprove_booking(Request $request){

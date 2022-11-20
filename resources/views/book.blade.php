@@ -24,101 +24,105 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     
     </head>
-    <body style="background-color: rgb(210, 216, 218)">
+    <body style="background-color: rgb(255, 255, 255)">
      
        {{--     --}}
 
        <nav class="shadow">
         <div class="logo" onclick="window.location.href='..' ">
-            <span class="title">MC <br>
-                <span class="subtitle">clinic Appointment</span>    
-            </span> 
-            
-        </div>
+          <span class="">MD-Appointment
+           
+          </span>
 
-        <div class="tabs">
-          <ul class="menutabs">
-           <li onclick="window.location.href='..'" style="cursor: pointer"><a id="home" href="..">Home</a>
-           <div class="line"></div>
-           </li>
-           <li >
-               <div class="dropdown">
-               <a href="javascript:void()" class="" >Clinics</a>
-              
-                 
-                   <ul class="dropdown-menu">
-                   
-                     @foreach ($clinics as $item)
-                     <li> <a href="" class="dropdown-item">{{$item->name}}</a></li>                                                     
-                     @endforeach
-                   </ul>
-                 </div>
-                 <div class="line"></div>
-           </li>
-           <li >
+      </div>
+
+      <div class="tabs">
+        <ul class="menutabs">
+            <li onclick="window.location.href='..'" style="cursor: pointer"><a id="home"
+                    href="..">Home</a>
+                <div class="line"></div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <a href="/Clinics" class="">Clinics</a>
 
 
-               <div class="dropdown">
-                   <a href="javascript:void()" class=""  >Doctors</a>
-                  
+                    {{-- <ul class="dropdown-menu">
 
-                       <ul class="dropdown-menu">
-                         @foreach ($doc as $item)
-                         <li> <a href="" class="dropdown-item">Dr.{{$item->firstname.' '.$item->lastname}}</a></li>   
-                         @endforeach
-                       </ul>
-                     </div>
-               <div class="line"></div>
-           </li>
-        
-     
-           @if (Route::has('login'))
-         
-               @auth
-                 {{-- if loginn --}}
-                 @if(Auth::user()->user_type == 'superadmin')
-                 <a href="{{route('superadmin.dashboard')}}" style="text-decoration: none;color:aliceblue">
-                 @elseif(Auth::user()->user_type == 'admin')
-                 <a href="{{route('admin.dashboard')}}" style="text-decoration: none;color:aliceblue">
-                 @endif
-            
-                 
-            <span class="hf " style="font-size:25px">Hi! </span>  <span class="hf" style="text-transform:capitalize">{{Auth::user()->name}}</span>
+                        @foreach ($clinics as $item)
+                            <li> <a href="" class="dropdown-item">{{ $item->name }}</a></li>
+                        @endforeach
+                    </ul> --}}
+                </div>
+                <div class="line"></div>
+            </li>
+            <li>
 
-           </a>
-               @else
-                 {{--   <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a> --}}
-                 <li><a href="{{route('login')}}">Signin</a>
-                   <div class="line"></div>
-               </li>
 
-                  {{--  @if (Route::has('register'))
-                       <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                   @endif --}}
-               @endauth
-          
-       @endif 
-          
-          
-          </ul>
-       </div>
+                <div class="dropdown">
+                    <a href="/Doctors" class="">Doctors</a>
 
+{{-- 
+                    <ul class="dropdown-menu">
+                        @foreach ($doc as $item)
+                            <li> <a href=""
+                                    class="dropdown-item">Dr.{{ $item->firstname . ' ' . $item->lastname }}</a></li>
+                        @endforeach
+                    </ul> --}}
+                </div>
+                <div class="line"></div>
+            </li>
+
+
+            @if (Route::has('login'))
+
+                @auth
+                    {{-- if loginn --}}
+                    @if (Auth::user()->user_type == 'superadmin')
+                        <a href="{{ route('superadmin.dashboard') }}" style="text-decoration: none;color:aliceblue">
+                        @elseif(Auth::user()->user_type == 'admin')
+                            <a href="{{ route('admin.dashboard') }}" style="text-decoration: none;color:aliceblue">
+                    @endif
+
+
+                    <span class="hf " style="font-size:25px">Hi! </span> <span class="hf"
+                        style="text-transform:capitalize">{{ Auth::user()->name }}</span>
+
+                    </a>
+                @else
+                    {{-- <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a> --}}
+
+                    {{-- @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+                            @endif --}}
+                @endauth
+
+            @endif
+
+
+        </ul>
+    </div>
         <button id="btnbars" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" ><i class="fas fa-bars"></i></button>
 
     </nav>
 
                  
 
-                <div class="main-book reveal">
+                <div class="main-book ">
          
                       <div class="row">
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                           <form method ="post" action="{{route('home.submit')}}" id="booknow">
                             @csrf
-                                    <div class="card mb-5 mt-4 shadow" style="background-color: rgba(210, 233, 245, 0.185)">
+                                    <div class="container mb-5 mt-4 " style="background-color: rgba(243, 243, 243, 0.185)">
                                      <div class="card-body login">
-                                                <h1>Book an Appointment</h1>
+                                      @if(Session()->has('cannotbe'))
+                                      <div class="alert alert-danger">
+                                        <h6>{{Session()->get('cannotbe')}}</h6>
+                                      </div>
+                                      @endif
+                                                <h5 style="font-weight: bolder;color:rgb(69, 69, 117)">Book an Appointment</h5>
                                                 <div class="row">
                                 <div class="col-md-6">
                           
@@ -126,17 +130,17 @@
                             @php
                                 $date = date('Y-m-d');
                             @endphp
-                           <input type="date" name="dateofappointment" class="authbox mb-2" placeholder="" value="{{old('dateofappointment')}}" autofocus required min="{{date('Y-m-d',strtotime(date("Y-m-d", strtotime($date)) . " +1 day"))}}" >
+                           <input type="date" name="dateofappointment" class="form-control mb-2" placeholder="" value="{{old('dateofappointment')}}" autofocus required min="{{date('Y-m-d',strtotime(date("Y-m-d", strtotime($date)) . " +1 day"))}}" >
                                  </div>
                                  <div class="col-md-6">
                                     <label for="">Time :</label>
-                                    <input type="time" name="timeofappointment" class="authbox " placeholder="" value="{{old('timeofappointment')}}" required>
+                                    <input type="time" name="timeofappointment" class="form-control " placeholder="" value="{{old('timeofappointment')}}" required>
 
                         </div>
 
                                     <div class="col-md-6">
                             <label for="">Clinic :</label>
-                          <select name="Clinic" class="authbox form-select @error('Clinic') is-invalid @enderror" id="clinic" >
+                          <select name="Clinic" class=" form-select @error('Clinic') is-invalid @enderror" id="clinic" >
                             <option value="">Select Clinic</option>
                             @foreach ($clinic as $item)
                             <option value="{{$item->id}}">{{$item->name}}</option> 
@@ -150,15 +154,15 @@
                         @enderror
                                     </div>
                          <div class="col-md-6">
-                            <label for="">Category :</label>
+                            <label for="">Specialization :</label>
                             <div id="category">
-                              <select name="Category" class="authbox form-select @error('Category') is-invalid @enderror" id="" disabled>
+                              <select name="Category" class=" form-select @error('Category') is-invalid @enderror" id="" disabled>
                               
                                            
                     </select>    
                     @error('Category')
                     <div class="invalid-feedback">
-                      <span style="font-size:12px">Please Select Category</span>
+                      <span style="font-size:12px">Please Select Specialization</span>
                     </div>
                   @enderror
                             </div>
@@ -168,7 +172,7 @@
                          <div class="col-md-12">
                             <label for="">Doctor :</label>
                             <div id="doctor">
-                          <select name="Doctor" class="authbox form-select  @error('Doctor') is-invalid @enderror" id="" disabled>
+                          <select name="Doctor" class=" form-select  @error('Doctor') is-invalid @enderror" id="" disabled>
                                                
                         </select>   
                         @error('Doctor')
@@ -179,7 +183,7 @@
                       </div>
                                     </div>
                             <div class="col-md-12">
-                          <button type="submit" id="submit" class="authbtn form-control mt-4 py-3">Submit</button>
+                          <button type="submit" id="submit" class="btn btn-primary form-control mt-4 py-3">SUBMIT</button>
                                     </div>
                                
                                              </div>
@@ -243,7 +247,7 @@ reveal();
               var val = $(this).val();
             if(val == ''){
               $('#doctor').html('<select name="Doctor" class="authbox form-select @error("Doctor") is-invalid @enderror"  id="" disabled></select> ');
-              $('#category').html('<select name="Category" class="authbox form-select @error("Category") is-invalid @enderror" id="" disabled> </select>  ');
+              $('#category').html('<select name="Category" class=" form-select @error("Category") is-invalid @enderror" id="" disabled> </select>  ');
             }
               $(this).removeClass('is-invalid');
               $.ajax({
@@ -252,7 +256,7 @@ reveal();
                 data : {sortby:val},
                 success : function(data){
                  $('#category').html(data);
-                 $('#doctor').html('<select name="Doctor" class="authbox form-select  id="" disabled></select> ');
+                 $('#doctor').html('<select name="Doctor" class=" form-select  id="" disabled></select> ');
                 }
               })
             })

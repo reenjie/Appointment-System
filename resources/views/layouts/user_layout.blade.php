@@ -54,7 +54,7 @@
 
                         
 
-                <div class="dropdown hf" style="font-weight: bolder;z-index: 9999">
+                <div class="dropdown " style="font-weight: bolder;z-index: 9999">
 
                   @if(Auth::check())  {{ Auth::user()->name }} 
                   
@@ -72,7 +72,7 @@
                     </ul>
                 </div>
                 
-                <span id="em" class="hf" style="font-weight: normal;font-size: 12px">  @if(Auth::check())   {{ Auth::user()->email }}
+                <span id="em" class="" style="font-weight: normal;font-size: 12px">  @if(Auth::check())   {{ Auth::user()->email }}
                         
                         @endif
         
@@ -155,7 +155,7 @@
 
 
         <div class="topbar">
-
+            <span class="topbartitle" style="">MD-APPOINTMENT</span>
             <a class=" hf" id="canvas" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
                 aria-controls="offcanvasExample">
                <i class="fas fa-bars"></i>
@@ -186,7 +186,7 @@
             @yield('content')
         </main>
     </div>
-    <h6 id="res" class="hf">All rights Reserved &middot; 2022</h6>
+    <h6 id="res" class="">All rights Reserved &middot; 2022</h6>
     
     @if(Auth::user()->fl == 0)
 

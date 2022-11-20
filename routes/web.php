@@ -83,6 +83,22 @@ Route::get('checkpoint', [App\Http\Controllers\HomeController::class, 'checkpoin
 
 Route::post('/home', [App\Http\Controllers\HomeController::class, 'verify'])->name('verifyotp');
 
+Route::get('/Clinics',function(){
+    $clinics = Clinic::all();
+    return view('clinics',compact('clinics'));
+});
+
+Route::get('/Doctors',function(){
+    $doctor = Doctor::all();
+    $clinics = Clinic::all();
+    return view('doctors',compact('doctor','clinics'));
+});
+
+Route::get('/AboutUs',function(){
+  
+    return view('aboutus');
+});
+
 
 
 

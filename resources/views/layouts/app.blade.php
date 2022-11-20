@@ -22,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
 </head>
-<body style="background-color: rgb(210, 216, 218);">
+<body style="background-color: rgb(255, 255, 255);">
     <div id="app">
       {{--   <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -81,12 +81,11 @@
         
         <nav class="shadow">
             <div class="logo" onclick="window.location.href='..' ">
-                <span class="title">MC <br>
-                    <span class="subtitle">clinic Appointment</span>    
-                </span> 
-                
+                <span class="">MD-Appointment
+                 
+                </span>
+    
             </div>
-
             <div class="tabs">
                <ul>
               

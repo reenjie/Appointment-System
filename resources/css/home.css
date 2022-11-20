@@ -9,11 +9,12 @@ body {
 }
 
 #offcanvasRight {
-    background-color: rgb(114, 163, 196);
+    background-color: rgb(70, 114, 172);
+    width: 60%;
 }
 
 nav {
-    height: 100px;
+    height: 50px;
     width: 100%;
     background-color: rgb(114, 163, 196);
 
@@ -38,6 +39,13 @@ nav .logo {
     cursor: pointer;
 }
 
+nav .logo span {
+    padding-top: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    color: rgb(236, 240, 243);
+}
+
 nav .title {
     font-family: "Tangerine", cursive;
     font-weight: bolder;
@@ -55,57 +63,26 @@ nav .subtitle {
     display: block;
     width: 200px;
 }
-
-#canvasbody ul {
+nav .tabs .menutabs {
+    /* list-style: none;
+    float: right;
+    margin-top: 10px;
+    margin-right: 50px; */
     list-style: none;
-}
-#canvasbody ul li {
     display: flex;
-    margin: 18px;
-    padding: 5px 10px;
-    border-radius: 10px;
-    transition: background 0.2s ease-in;
-
-    text-align: center;
+    margin: 2px;
+    align-items: center;
     justify-content: center;
 }
 
-#canvasbody ul li:hover .line {
-    width: 0;
-    transition: width 0.3s;
-}
-
-#canvasbody .line {
-    display: none;
-}
-
-#canvasbody ul li:hover .line {
-    background-color: rgb(226, 224, 220);
-    width: 100%;
-    height: 2px;
-}
-#canvasbody ul li a {
-    text-decoration: none;
-    color: rgb(15, 100, 153);
-    font-size: 30px;
-    font-family: "Poppins", sans-serif;
-}
-#canvasbody ul li:hover {
-    background-color: rgb(158, 193, 216);
-}
-nav .tabs .menutabs {
-    list-style: none;
-    float: right;
-    margin-top: 10px;
-    margin-right: 50px;
-}
-
 nav .tabs .menutabs li {
-    display: inline-block;
+    padding: 10px;
+
+    /* display: inline-block;
     margin: 18px;
     padding: 5px 10px;
     border-radius: 10px;
-    transition: background 0.2s ease-in;
+    transition: background 0.2s ease-in; */
 }
 
 .line {
@@ -114,26 +91,96 @@ nav .tabs .menutabs li {
     position: relative;
 }
 
-nav .tabs ul li:hover .line {
+/* nav .tabs ul li:hover .line {
     background-color: rgb(226, 224, 220);
     width: 100%;
     height: 2px;
-}
-nav .tabs ul li:hover {
+} */
+/* nav .tabs ul li:hover {
     background-color: rgb(97, 154, 192);
-}
+} */
 nav .tabs ul li a {
     text-decoration: none;
-    color: rgb(15, 100, 153);
-    font-size: 17px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
     font-family: "Poppins", sans-serif;
     text-align: center;
+    padding: 5px 5px;
+    border-radius: 20px;
+    transition: all ease-in-out 0.2s;
 }
 
+nav .tabs ul li:hover a {
+    background-color: rgb(151, 199, 253);
+    color: rgb(15, 100, 153);
+    padding: 10px;
+}
+
+.imgbanner {
+    margin-top: 120px;
+}
+
+.btns {
+    text-align: center;
+    padding: 10px;
+}
+
+.btns .btnbook {
+    outline: none;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    background-color: rgb(84, 123, 231);
+    color: white;
+    font-weight: bold;
+    border-radius: 50px;
+    text-transform: uppercase;
+    transition: all ease-in-out 0.2s;
+}
+.btns .btnbook:hover {
+    /* background-color: rgb(16, 59, 177);
+    color: white; */
+    transform: scaleX(1.05);
+}
+.btns .btninfo {
+    outline: none;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    color: rgb(72, 106, 228);
+    font-weight: bold;
+    border-radius: 50px;
+    text-transform: uppercase;
+    transition: all ease-in-out 0.2s;
+}
+#canvasbody {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+#canvasbody ul {
+    list-style: none;
+}
+
+#canvasbody ul li {
+    padding: 20px;
+}
+
+#canvasbody ul li a {
+    text-decoration: none;
+    color: rgb(236, 236, 236);
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#canvasbody ul li:hover {
+    background-color: rgb(23, 100, 151);
+}
 .banner {
     height: 560px;
     width: 100%;
-    background-color: rgb(114, 163, 196);
+    background-color: rgb(233, 237, 240);
     z-index: 0;
     /*    background-image: url('../../public/img/home.jpeg');
             background-position: center;
@@ -141,7 +188,7 @@ nav .tabs ul li a {
     border-bottom-left-radius: 50%;
     border-bottom: 5px solid rgb(114, 163, 196);
     border-top-right-radius: 80%;
-    border-bottom: 59px solid whitesmoke;
+    border-bottom: 59px solid rgb(211, 222, 255);
 }
 .banner h2 {
     position: absolute;
@@ -281,7 +328,10 @@ footer h5 {
     color: rgb(8, 69, 109);
 }
 footer {
-    background-color: rgb(114, 163, 196);
+    position: relative;
+    left: 0;
+
+    bottom: 0;
 }
 
 .reveal {
@@ -354,7 +404,7 @@ footer {
     border: none;
     outline: none;
     background-color: transparent;
-    font-size: 30px;
+    font-size: 20px;
     color: rgb(244, 246, 247);
     position: absolute;
     right: 40px;
@@ -370,7 +420,7 @@ footer {
         display: block;
     }
     nav {
-        height: 70px;
+        height: 50px;
     }
     nav .tabs {
         display: none;
@@ -391,10 +441,6 @@ footer {
         font-size: 60px;
     }
 
-    nav .logo {
-        top: -5px;
-    }
-
     nav .title {
         z-index: 1;
         font-size: 40px;
@@ -412,6 +458,9 @@ footer {
 @media screen and (max-width: 800px) {
     .main {
         width: 100%;
+    }
+    footer {
+        display: none;
     }
 
     #img1 {
