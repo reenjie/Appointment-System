@@ -20,17 +20,7 @@
     <div class="titlebar">
         <h4 class="hf mb-3">Appointments</h4>
      
-        <span style="font-size:12px;cursor: default;">
-            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item active">Pending</li>
-                  <li class="breadcrumb-item text-primary" aria-current="page">Approved</li>
-                  <li class="breadcrumb-item active" aria-current="page">Cancelled</li>
-                  <li class="breadcrumb-item active" aria-current="page">Disapproved</li>
-                  <li class="breadcrumb-item active" aria-current="page">Completed</li>
-                </ol>
-              </nav>
-        </span>
+        <span class="badge bg-primary mb-2" style="text-transform:uppercase">Approved</span>
         @if(Session::get('Success'))
         
              <div class="alert alert-success alert-dismissible fade af show" role="alert">
@@ -83,8 +73,10 @@
                                 </h6>
                                 <br>
                                 <h6 style="font-weight: normal;font-size:12px" class="af mb-2">Medical Certificate</h6>
-                               
-                         @if($row->attachedfile == null)
+                                @php
+                                $attachments = DB::select('select * from attachments where appt = '.$row->id.' ');
+                            @endphp
+                         @if(count($attachments) == 0)
 
                             
 <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#fileattach{{$row->id}}" style="font-size:14px">
@@ -103,7 +95,7 @@ Attach file
         @csrf
       <div class="modal-body">
       
-        <input type="file" name="imgfile" required accept="image/*" data-id="{{$row->id}}" class="onUpload form-control" style="font-size:14px"/>
+        <input type="file" name="imgfile[]" multiple required accept="image/*" data-id="{{$row->id}}" class="onUpload form-control" style="font-size:14px"/>
         <input type="hidden" value="{{$row->id}}" name="apptid">
       </div>
       <div class="modal-footer">
@@ -117,9 +109,14 @@ Attach file
 
 @else
 <div class="p-2">
-  <a href="{{asset('attachments/').'/'.$row->attachedfile}}" target="_blank">
-    <i class="fas fa-image"></i> {{$row->attachedfile}}
+
+  @foreach ($attachments as $fileitems)
+  <a href="{{asset('attachments/').'/'.$fileitems->file}}" target="_blank">
+    <i class="fas fa-image"></i> {{$fileitems->file}}
   </a>
+  <br>
+  @endforeach
+ 
 
   <button class="clearattach" data-id="{{$row->id}}" style="float: right;font-size:14px;color:rgb(204, 28, 28);outline:none;border:none"> remove</button>
 </div>
@@ -137,70 +134,141 @@ Attach file
 
                             </div>
                             <div class="col-md-6">
-                                <button style="float:right;text-decoration:none;font-size:13px" class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#medhistory">Medical History</button>
+                              <button style="text-decoration:none;font-size:13px" class="mb-2 btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#medhistory">History</button>
 
 
-                                <div class="modal fade" id="medhistory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                      <div class="modal-body">
-                                        <button type="button" style="float:right" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        <div class="badge mb-4 bg-success" style="font-size: 15px" id="exampleModalLabel">Medical History</div>
-                                        <div class="container">
-                                          <table class="table table-striped table-sm ">
-                                            <thead>
-                                              <tr class="table-success text-secondary">
-                                              <th>Date-Completed</th>
-                                              <th>Treatment</th>
-                                              <th>Remarks</th>
-                                
-                                              <th>Doctor</th>
-                                              <th>Clinic</th>
-                                              </tr>
-                                             
-                                            </thead>
-                                            <tbody>
-                                              @foreach ($completeappt as $apt )
-                                          
-                                              @if($apt->user_id == $row->user_id)
-                                              <tr style="font-size: 14px">
-                                                <td>{{date("@h:ma F j,Y",strtotime($apt->updated_at))}}</td>
-                                                <td>{{$apt->treatment}}</td>
-                                                <td>{{$apt->remarks}}</td>
-                                                <td>Dr. {{$apt->doctor}}
-                                                  @foreach ($alldoctor as $dc )
-                                                      @if($dc->id == $apt->doctor)
-                                                      {{$dc->firstname." ".$dc->lastname}}
-                                                      <br>
-                                                  <span style="font-size: 11px">    {{$dc->email ." | ".$dc->contact}}</span>
-                                                      @endif
-                                                  @endforeach
-                                                </td>
-                                                <td>
-                                                @foreach ($allclinic as $icc)
-                                                @if($icc->id == $apt->clinic)
-                                                {{$icc->name}}
-                                                @endif
-                                                    
-                                                @endforeach
-                                                </td>
-                                              </tr>
-                                
-                                              @endif
-                                             
-                                          
-                                              @endforeach
-                                            </tbody>
-                                          </table>
-                                          
-                                
-                                        </div>
-                                
-                                      </div>
+                              <div class="modal fade" id="medhistory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                    <div class="modal-body">
+                                      <button type="button" style="float:right" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      <div class="badge mb-4 bg-success" style="font-size: 15px" id="exampleModalLabel">History</div>
+                                      <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" style="font-size:14px" aria-selected="true">Medical</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                          <button class="nav-link" style="font-size:14px" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Appointment</button>
+                                        </li>
                                    
+                                      </ul>
+                                      <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                                          <div class="container">
+                                            <table class="table table-striped table-sm " style="font-size:14px">
+                                              <thead>
+                                                <tr class="table-success text-secondary">
+                                                <th>Date-Completed</th>
+                                                <th>Treatment</th>
+                                                <th>Remarks</th>
+                                  
+                                                <th>Doctor</th>
+                                                <th>Clinic</th>
+                                                </tr>
+                                               
+                                              </thead>
+                                              <tbody>
+                                                @foreach ($completeappt as $apt )
+                                            
+                                                @if($apt->user_id == $row->user_id)
+                                                <tr style="font-size: 14px">
+                                                  <td>{{date("@h:ma F j,Y",strtotime($apt->updated_at))}}</td>
+                                                  <td>{{$apt->treatment}}</td>
+                                                  <td>{{$apt->remarks}}</td>
+                                                  <td>Dr. {{$apt->doctor}}
+                                                    @foreach ($alldoctor as $dc )
+                                                        @if($dc->id == $apt->doctor)
+                                                        {{$dc->firstname." ".$dc->lastname}}
+                                                        <br>
+                                                    <span style="font-size: 11px">    {{$dc->email ." | ".$dc->contact}}</span>
+                                                        @endif
+                                                    @endforeach
+                                                  </td>
+                                                  <td>
+                                                  @foreach ($allclinic as $icc)
+                                                  @if($icc->id == $apt->clinic)
+                                                  {{$icc->name}}
+                                                  @endif
+                                                      
+                                                  @endforeach
+                                                  </td>
+                                                </tr>
+                                  
+                                                @endif
+                                               
+                                            
+                                                @endforeach
+                                              </tbody>
+                                            </table>
+                                            
+                                  
+                                          </div>
+                                  
+                              
+                              
+                                        </div>
+                                        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                                          
+                                          <div class="container">
+                                            <table class="table table-striped table-sm table-bordered" style="font-size:14px">
+                                              <thead>
+                                                <tr class="table-warning text-secondary">
+                                                <th>Date of Appointment</th>
+                                                <th>Time of Appointment</th>
+                                              
+                                                <th>Doctor</th>
+                                                <th>Clinic</th>
+                                                </tr>
+                                               
+                                              </thead>
+                                              <tbody>
+                                                @foreach ($completeappt as $apt )
+                                            
+                                                @if($apt->user_id == $row->user_id)
+                                                <tr style="font-size: 14px">
+                                                 <td>{{date('F j,Y',strtotime($apt->dateofappointment))}}</td>
+                                                 <td>{{date('h:i a',strtotime($apt->timeofappointment))}}</td>
+                                                  <td>Dr. {{$apt->doctor}}
+                                                    @foreach ($alldoctor as $dc )
+                                                        @if($dc->id == $apt->doctor)
+                                                        {{$dc->firstname." ".$dc->lastname}}
+                                                        <br>
+                                                    <span style="font-size: 11px">    {{$dc->email ." | ".$dc->contact}}</span>
+                                                        @endif
+                                                    @endforeach
+                                                  </td>
+                                                  <td>
+                                                  @foreach ($allclinic as $icc)
+                                                  @if($icc->id == $apt->clinic)
+                                                  {{$icc->name}}
+                                                  @endif
+                                                      
+                                                  @endforeach
+                                                  </td>
+                                                </tr>
+                                  
+                                                @endif
+                                               
+                                            
+                                                @endforeach
+                                              </tbody>
+                                            </table>
+                                            
+                                  
+                                          </div>
+                                  
+                              
+                                        </div>
+                                     
+                                      </div>
+                              
+                              
+                                  
                                     </div>
+                                 
                                   </div>
                                 </div>
+                              </div>
                                 <h6 class="af">
                                     Details 
                                     <hr>

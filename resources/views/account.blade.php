@@ -33,12 +33,7 @@
        {{--     --}}
 
        <nav class="shadow">
-        <div class="logo" onclick="window.location.href='..' ">
-            <span class="title">MC <br>
-                <span class="subtitle">clinic Appointment</span>    
-            </span> 
-            
-        </div>
+       
 
        
 
@@ -55,7 +50,7 @@
                         <div class="col-md-6">
                    <div class="card shadow mt-3 bg-light">
                         <div class="card-body">
-                        <form action="{{route('edit.updateaccount')}}" method="post" autocomplete="off">
+                        <form action="{{route('edit.updateaccount')}}" method="post" autocomplete="off" enctype="multipart/form-data">
                                     @csrf
                         @php
             $usertype = Auth::user()->user_type;
@@ -77,6 +72,20 @@
                           <a href="{{$route}}">Back to Dashboard</a>
                          
                          <h5 class="hf mt-2">My Account</h5>
+
+                         @if(Auth::user()->image == null)
+                         <img src="https://cdn.dribbble.com/users/244309/screenshots/14872040/01_4x.jpg" alt="" class="img-thumbnnail shadow rounded-circle"
+                         style="width: 60px;height: 60px;border-radius: 30px;">
+                         @else 
+                         <img src="{{asset('profile'.'/'.Auth::user()->image)}}" alt="" class="img-thumbnnail shadow rounded-circle"
+                         style="width: 60px;height: 60px;border-radius: 30px;">
+
+                         @endif
+
+                         <input type="file" accept="image/*" name="userimage">
+                         <br>
+                         <span style="font-size:12px" class="text-danger">Select Image file to update profile</span>
+                         <br><br>
                          
                          <span class="af" style="font-size:14px">Email:</span>
                          <input type="email" class="form-control mb-2 " disabled value="{{Auth::user()->email}}">

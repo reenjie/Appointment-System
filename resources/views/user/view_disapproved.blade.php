@@ -18,17 +18,7 @@
         <div class="titlebar">
             <h4 class="hf mb-3">View Appointment</h4>         
         </div>
-        <span style="font-size:12px;cursor: default;">
-            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item active">Pending</li>
-                  <li class="breadcrumb-item active" aria-current="page">Approved</li>
-                  <li class="breadcrumb-item active" aria-current="page">Completed</li>
-                  <li class="breadcrumb-item text-primary" aria-current="page">Disapproved</li>
-                  <li class="breadcrumb-item active" aria-current="page">Cancelled</li>
-                </ol>
-              </nav>
-        </span>
+        <span class="badge bg-danger mb-2" style="text-transform:uppercase">Disapproved</span>
 
         <div class="row">
             <div class="col-md-8">

@@ -53,8 +53,15 @@
     <div id="app">
         <nav class="sidenav shadow" id="navitems">
             <div class="userinfo">
-                <img src="https://cdn.dribbble.com/users/244309/screenshots/14872040/01_4x.jpg" class="img-thumbnnail shadow rounded-circle"
-                    style="width: 60px;height: 60px;border-radius: 30px;">
+                @if(Auth::user()->image == null)
+                         <img src="https://cdn.dribbble.com/users/244309/screenshots/14872040/01_4x.jpg" alt="" class="img-thumbnnail shadow rounded-circle"
+                         style="width: 60px;height: 60px;border-radius: 30px;">
+                         @else 
+                         <img src="{{asset('profile'.'/'.Auth::user()->image)}}" alt="" class="img-thumbnnail shadow rounded-circle"
+                         style="width: 60px;height: 60px;border-radius: 30px;">
+
+                         @endif
+
 
                         
 

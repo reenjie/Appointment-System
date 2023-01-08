@@ -267,19 +267,53 @@ class Edit_Controller extends Controller
     }
 
     public function updateaccount(Request $request){
+       
      if($request->input('password') == Auth::user()->password){
-        User::where('id',Auth::user()->id)->update([
+     
+            if($request->file('userimage')){
+                $imagefile = time().'.'.$request->file('userimage')->getClientOriginalExtension();
+                $request->file('userimage')->move(public_path('profile'),$imagefile);
+  
+
+   User::where('id',Auth::user()->id)->update([
+            'name'=>$request->input('name'),
+            'address'=>$request->input('address'),
+            'contactno'=>$request->input('contactno'),
+            'image'=>$imagefile
+        ]);
+            }else{
+         User::where('id',Auth::user()->id)->update([
             'name'=>$request->input('name'),
             'address'=>$request->input('address'),
             'contactno'=>$request->input('contactno'),
         ]);
+            }
+
+            
      }else {
-        User::where('id',Auth::user()->id)->update([
+
+        if($request->file('userimage')){
+            $imagefile = time().'.'.$request->file('userimage')->getClientOriginalExtension();
+            $request->file('userimage')->move(public_path('profile'),$imagefile);
+
+
+User::where('id',Auth::user()->id)->update([
+        'name'=>$request->input('name'),
+        'address'=>$request->input('address'),
+        'contactno'=>$request->input('contactno'),
+        'image'=>$imagefile,
+        'password'=>Hash::make($request->input('password')),
+    ]);
+        }else{
+     User::where('id',Auth::user()->id)->update([
             'name'=>$request->input('name'),
             'address'=>$request->input('address'),
             'contactno'=>$request->input('contactno'),
             'password'=>Hash::make($request->input('password')),
         ]);
+        }
+
+      
      }
 
      $usertype = Auth::user()->user_type;

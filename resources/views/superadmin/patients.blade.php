@@ -56,7 +56,93 @@
                                 @endforeach
 
                               @if($count>=1)
-                                {{$count}}
+                              <button data-bs-toggle="modal" data-bs-target="#apptdetails{{$row->id}}" class="btn btn-light text-primary btn-sm" style="font-size:13px">{{$count}}</button>
+
+
+                              <div class="modal fade" id="apptdetails{{$row->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog ">
+                                  <div class="modal-content">
+                                     
+                                    
+                                      <div class="modal-body">    
+                                          <button type="button" style="float: right" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          <br><br>
+                                          <h5 class="hf">Appointment-Details</h5>
+    
+                                          @php
+                                              $userappt = DB::select('SELECT * FROM `appointments` where user_id= '.$row->id.' ');
+                                          @endphp
+    
+                                          @foreach ($userappt as $ap)
+                                          <h6 style="font-size:13px" class="af mb-3 bg-light shadow p-3">
+                                            <span style="float: right">   Date :  <span style="font-weight: bold" class="text-danger">{{date('F j,Y',strtotime($ap->dateofappointment))}}</span>
+                   
+                                               <br>
+                                               Time : <span style="font-weight: bold" class="text-danger">{{date('h:i a',strtotime($ap->timeofappointment))}}</span>
+                                           </span>
+                                               <br><br><br>
+                                               <ul class="list-group list-group-flush">
+                                                   <li class="list-group-item">
+                                                     
+                           
+                                                      Status :
+                                                      @if($ap->status == 0)
+                                                      <span class="text-warning">Pending</span>
+                                                      @elseif($ap->status == 1)
+                                                      <span class="text-primary">Approved</span>
+                                                      @elseif($ap->status == 2)
+                                                      <span class="text-danger">Disapproved</span>
+                                                      @elseif($ap->status == 3)
+                                                      <span class="text-success">Completed</span>
+                                                      @elseif($ap->status == 4)
+                                                      <span class="text-success">Currently Referred</span>
+                                                      @elseif($ap->status == 5)
+                                                      <span class="text-danger">Cancelled</span>
+    
+                                                    
+                                                      @endif
+                                                      
+                                                   </li>
+                                                   
+                                                   <li class="list-group-item">
+                                                    @php
+                                                        $docdata = DB::select('select * from doctors where id = '.$ap->doctor.' ');
+                                                    @endphp
+    
+                                                    @foreach ($docdata as $doc)
+                                                    Type : 
+                                                    <span  style="font-weight: bold;font-size:15px;" class="text-primary mb-2">
+                                                    @php
+                                                        $category = DB::select('select * from categories where id = '.$doc->category.' ');
+                                                    @endphp
+                                                    {{$category[0]->name}}
+                                                    </span> <br><br>
+                                                       Doctor : 
+                                                       <span  style="font-weight: bold;font-size:15px;" class="text-primary mb-2">Dr. {{$doc->firstname.' '.$doc->lastname}}</span> <br><br>
+                           
+                                                       Details :
+                                                       <br>
+                                                       Contact # : <span class="text-primary">{{$doc->contact}}</span><br>
+                                                       Email : <span class="text-primary">{{$doc->email}}</span>
+                                                    @endforeach
+                                                  
+                                                   </li>
+                                                 
+                                                 </ul>
+                   
+                                              
+                                             
+                   
+                                               
+                                           </h6>  
+                                          @endforeach
+                                         
+                                      </div>
+                                      <div class="modal-footer bg-light" ></div>
+                                   
+                                  </div>
+                                  </div>
+                              </div>
                               @else
                              <span class="text-danger" style="font-size:11px">No booked appointments yet.</span> 
                               @endif

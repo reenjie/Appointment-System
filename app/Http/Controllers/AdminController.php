@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Feedback;
+use App\Models\attachments;
 use App\Models\Ref_history;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -256,14 +257,23 @@ class AdminController extends Controller
       public function attachedfile(Request $request){
         $id = $request->input('apptid');
         if($request->file('imgfile')){
-          $imageName = time().'.'.$request->file('imgfile')->getClientOriginalExtension();
-          $request->file('imgfile')->move(public_path('attachments'), $imageName);
+          // $imageName = time().'.'.$request->file('imgfile')->getClientOriginalExtension();
+          // $request->file('imgfile')->move(public_path('attachments'), $imageName);
 
-          Appointment::where('id',$id)->update([
-            'attachedfile' => $imageName,
-          ]);
-         
-          return redirect()->back();
+            foreach($request->file('imgfile') as $files){
+                $imagefile = time().'.'.$files->getClientOriginalExtension();
+              $files->move(public_path('attachments'),$imagefile);
+
+              attachments::create([
+                'appt'=>$id,
+                'file'=>$imagefile,
+              ]);
+
+            }
+
+            return redirect()->back();
+
+      
   
         }
       }
@@ -271,17 +281,20 @@ class AdminController extends Controller
       public function removeAttachment(Request $request){
         $id = $request->id;
 
-        $appt_attachedfile = Appointment::findorFail($id);
-        $image_path =   public_path('attachments/' . $appt_attachedfile->attachedfile);
-        
-        if(file_exists($image_path)){
-          unlink($image_path);
+        $appt_attachedfile = attachments::where('appt',$id)->get();
+
+        foreach($appt_attachedfile as $items){
+            $path =  public_path('attachments/' . $items->file);
+            if(file_exists($path)){
+              unlink($path);
+            }
+
+            attachments::where('appt',$id)->delete();
         }
 
-        Appointment::where('id',$id)->update([
-          'attachedfile' => null,
-        ]);
         return redirect()->back();
+        
+     
   
       }
 }
