@@ -172,19 +172,9 @@ class Edit_Controller extends Controller
         $doctor = $request->input('Doctor');
         $top = $request->input('timeofappointment');
         $dop = $request->input('dateofappointment');
+          
 
-        // Appointment::where('id',$id)->update([
-        //     'clinic'=>$clinic,
-        //     'category'=>$category,
-        //     'doctor'=>$doctor,
-        //     'dateofappointment'=>$dop,
-        //     'timeofappointment'=>$top,
-        //     'status'=>1,
-        //     'refferedto'=>0,
-        //     'refferedto_doctor'=>0,
-        //     'remarks'=>'',
-        // ]);
-
+        if($dop&&$top){
         Appointment::where('id',$id)->update([
         'dateofappointment'=>$dop,
         'timeofappointment'=>$top,
@@ -205,6 +195,23 @@ class Edit_Controller extends Controller
         $cliniclocation =  $clinicdetails[0]['street'].' ,'.$clinicdetails[0]['barangay'].' '.$clinicdetails[0]['city'];
 
         return redirect()->route('mail.notify_patient',['email'=>$email,'name'=>$name,'doa'=>$dop,'toa'=>$top,'cname'=>$clinicname,'loc'=>$cliniclocation,'tp' =>'rebook','remarks'=>$request->remarks,'treatment'=>$request->treatment]);
+        }else {
+            echo 'User Rebook itself';
+        }
+
+        // // Appointment::where('id',$id)->update([
+        // //     'clinic'=>$clinic,
+        // //     'category'=>$category,
+        // //     'doctor'=>$doctor,
+        // //     'dateofappointment'=>$dop,
+        // //     'timeofappointment'=>$top,
+        // //     'status'=>1,
+        // //     'refferedto'=>0,
+        // //     'refferedto_doctor'=>0,
+        // //     'remarks'=>'',
+        // // ]);
+
+    
 
 
       /*   */

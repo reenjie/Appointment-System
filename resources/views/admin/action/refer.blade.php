@@ -27,57 +27,66 @@
                         
                      
                        
-                        @if($appt_attachedfile == null)
-                        <span style="font-size: 14px;color:rgb(59, 58, 58)">Attach Medical Certificate </span>
-                            <br>
-                        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#fileattach{{$id}}" style="font-size:14px">
-                        Attach file
-                        </button>
-                        
-                        <!-- Modal -->
-                        <div class="modal fade" id="fileattach{{$id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h6 class="modal-title fs-5" id="exampleModalLabel"></h6>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <form action="{{route('admin.attachedfile')}}" method="post" enctype="multipart/form-data">
-                                @csrf
-                              <div class="modal-body">
-                              
-                                <input type="file" name="imgfile" required accept="image/*" data-id="{{$id}}" class="onUpload form-control" style="font-size:14px"/>
-                                <input type="hidden" value="{{$id}}" name="apptid">
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary btn-sm">Upload</button>
-                              </div>
-                            </form>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        @else
-                        <div class="p-2">
-                            <span style="font-size: 14px;color:rgb(59, 58, 58)">Attached Medical Certificate </span>
-                            <br>
-                          <a href="{{asset('attachments/').'/'.$appt_attachedfile}}" target="_blank">
-                            <i class="fas fa-image"></i> {{$appt_attachedfile}}
-                          </a>
-                        
-                          <button class="clearattach" data-id="{{$id}}" style="float: right;font-size:14px;color:rgb(204, 28, 28);outline:none;border:none"> remove</button>
-                        </div>
-                        
-                        
-                        
-                        @endif
+                        @php
+                                $attachments = DB::select('select * from attachments where appt = '.$id.' ');
+                            @endphp
+                         @if(count($attachments) == 0)
+
+                            
+<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#fileattach{{$id}}" style="font-size:14px">
+Attach file
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="fileattach{{$id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title fs-5" id="exampleModalLabel"></h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{route('admin.attachedfile')}}" method="post" enctype="multipart/form-data">
+        @csrf
+      <div class="modal-body">
+      
+        <input type="file" name="imgfile[]" multiple required accept="image/*" data-id="{{$id}}" class="onUpload form-control" style="font-size:14px"/>
+        <input type="hidden" value="{{$id}}" name="apptid">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary btn-sm">Upload</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+@else
+<div class="p-2">
+
+  @foreach ($attachments as $fileitems)
+  <a href="{{asset('attachments/').'/'.$fileitems->file}}" target="_blank">
+    <i class="fas fa-image"></i> {{$fileitems->file}}
+  </a>
+  <br>
+  @endforeach
+ 
+
+  <button class="clearattach" data-id="{{$id}}" style="float: right;font-size:14px;color:rgb(204, 28, 28);outline:none;border:none"> remove</button>
+</div>
+
+
+
+@endif
                         <h6 class="af" style="font-size:13px">Remarks:</h6>
                         <input type="hidden" name="id" value="{{ $id }}">
                         <textarea name="" class="rem form-control" id="{{$id}}remarks" cols="4" rows="4" style="resize: none">@if($remarks=='')@else {{ $remarks }}@endif</textarea>
                         <div class="invalid-feedback">
                                     <span class="text-danger" style="font-size:12px">Please Provide Remarks *</span>
                         </div>
+
+                        <br>
+                        <input type="checkbox" id="agreement" style="width:18px;height:18px"> <a target="_blank" href="{{route('agreement')}}">Accept the letter of agreement</a>
                     </div>
                 </div>
             </div>
@@ -172,8 +181,9 @@
             var clinic = $(this).data('clinic');
             var appt = $(this).data('appt');
             var remarks = $('#'+appt+'remarks').val();
-                      
-            if(remarks == ''){
+              
+            if($('#agreement').prop('checked') == true){
+                     if(remarks == ''){
             $('#'+appt+'remarks').addClass('is-invalid');
             }else {
                         swal({
@@ -192,6 +202,15 @@
                         });
 
             }
+            }else {
+              swal("Acceptance Required!", "Please Accept the letter of agreement,Check the box to accept", "error");
+            }
+
+
+
+           
+                      
+    
 
 
             })

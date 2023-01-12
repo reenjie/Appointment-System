@@ -1,6 +1,14 @@
 @extends('layouts.superadmin_layout')
 @section('content')
     <div class="container">
+
+    @if(session()->has('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+  {{session()->get('success')}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+    @endif
+
         <div class="titlebar">
             <h4 class="hf mb-3">Dashboard</h4>
             
@@ -130,6 +138,44 @@
                         Total Number of Appointments: <span class="text-secondary" style="font-weight: bold">{{count($Appointment)}}</span>
                     </div>
                   </div>
+
+
+                  <br>
+                  <!-- Button trigger modal -->
+<button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="font-weight:bold">
+ Manage Letter of Agreement Content <i class="fas fa-cogs"></i>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-5" id="staticBackdropLabel">Letter of Agreement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{route('updateagreement')}}" method="post">
+        @csrf
+      <div class="modal-body">
+      @php
+       $agree = DB::select('SELECT * FROM `agreements`');
+       @endphp
+      <p>
+         @foreach($agree as $item)
+                               
+        <textarea name="content" required style="width:100%;height:auto;outline:none;border:none;background-color:#edf6fa;"  id="" cols="30" rows="10">{{$item->content}}</textarea>
+            @endforeach
+       </p>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light text-danger btn-sm" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-light text-primary btn-sm">Update <i class="fas fa-edit"></i></button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
             </div>
         </div>

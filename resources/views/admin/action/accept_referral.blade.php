@@ -21,7 +21,16 @@
                                     <br>
                                    <i class="fas fa-phone"></i>   {{$patient->contactno}}
                                     <br>
+
+                                   <div class="card mt-2">
+                                    <div class="card-body">
+                                      <h6>Let the patient Rebook or Reschedule his/her appointment base on his/her availability ..</h6>
+                                    <br>
+
+                                      <input type="checkbox" id="userbook" style="width:18px;height:18px"  name="userrebook"> <span class="text-danger">Check here and click Save.</span>
                                    
+                                    </div>
+                                   </div>
                                       </div>
                                     </div>
                                   
@@ -31,8 +40,10 @@
                                     @endforeach
                                     <form method ="post" action="{{route('edit.rebook')}}" id="booknow">
                                       @csrf
+                                    
                                               <div class="card mb-5 mt-2 shadow" style="background-color: rgba(210, 233, 245, 0.185)">
                                                <div class="card-body login">
+                                               
                                                       <h5>Set an Appointment</h5>
                                                           <div class="row">
                                           <div class="col-md-6">
@@ -41,11 +52,11 @@
                                       @php
                                           $date = date('Y-m-d');
                                       @endphp
-                                     <input type="date" name="dateofappointment" class="authbox mb-2 form-control" placeholder="" value="{{old('dateofappointment')}}" autofocus required min="{{date('Y-m-d',strtotime(date("Y-m-d", strtotime($date)) . " +1 day"))}}" >
+                                     <input type="date" id="da" name="dateofappointment" class="authbox mb-2 form-control" placeholder="" value="{{old('dateofappointment')}}" autofocus required min="{{date('Y-m-d',strtotime(date("Y-m-d", strtotime($date)) . " +1 day"))}}" >
                                            </div>
                                            <div class="col-md-6">
                                               <label for="">Time :</label>
-                                              <input type="time" name="timeofappointment" class="authbox form-control " placeholder="" value="{{old('timeofappointment')}}" required>
+                                              <input type="time" id="ta" name="timeofappointment" class="authbox form-control " placeholder="" value="{{old('timeofappointment')}}" required>
           
                                   </div>
                                   <input type="hidden" name="apptid" value="{{$id}}">
@@ -98,4 +109,20 @@
                                   </div>
             </div>
     </div>
+
+    <script>
+      $('#userbook').click(function(){
+        if($(this).prop('checked') == true){
+         
+          $('#da').removeAttr('required').val('').attr('readonly',true);
+          $('#ta').removeAttr('required').val('').attr('readonly',true);;
+          
+
+        }else {
+          $('#da').attr('required',true).removeAttr('readonly');
+          $('#ta').attr('required',true).removeAttr('readonly');
+         
+        }
+      })
+    </script>
 @endsection

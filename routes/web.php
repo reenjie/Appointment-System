@@ -55,6 +55,13 @@ Route::get('/Book',function(){
 });
 
 
+Route::get('/agreement',function(){
+    return view('Agreement');
+})->name('agreement');
+
+Route::post('updateagreement',[App\Http\Controllers\AgreementController::class, 'update'])->name('updateagreement');
+
+
 Route::controller(App\Http\Controllers\BookController::class)->group(function(){
     Route::prefix('Home')->name('home.')->group(function(){ 
         Route::get('getcategory','category')->name('category');

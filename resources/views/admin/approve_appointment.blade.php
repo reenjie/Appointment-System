@@ -74,7 +74,7 @@
 
                                 <br>
                                 <h6 style="font-weight: normal;font-size:12px" class="af mb-2">-- Diagnostics --</h6>
-                                <textarea name="diagnostics" class="form-control" id="{{$row->id}}diagnostics" cols="30" rows="5"></textarea>
+                                <textarea name="diagnostics" placeholder='Type Diagnostics here..' class="form-control" id="{{$row->id}}diagnostics" cols="30" rows="5"></textarea>
                                 <br>
                                 <h6 style="font-weight: normal;font-size:12px" class="af mb-2">Medical Certificate</h6>
                                 @php

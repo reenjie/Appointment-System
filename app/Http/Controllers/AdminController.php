@@ -51,6 +51,8 @@ class AdminController extends Controller
             if($value->laps == 0){
               $userd = [];
               $getuser = User::findorFail($value->user_id);
+
+              
               return redirect()->route('mail.notifylaps',['appt_id'=>$id,'userid'=>$getuser->id,'email'=>$getuser->email,'name'=>$getuser->name]);
             }
         
@@ -247,6 +249,7 @@ class AdminController extends Controller
         $doctor = $request->ref;
         $patient = $request->patient;
 
+       
 
         $data = Appointment::where('id',$id)->get();
         $clinicid = Auth::user()->clinic;
@@ -278,8 +281,8 @@ class AdminController extends Controller
           // $imageName = time().'.'.$request->file('imgfile')->getClientOriginalExtension();
           // $request->file('imgfile')->move(public_path('attachments'), $imageName);
 
-            foreach($request->file('imgfile') as $files){
-                $imagefile = time().'.'.$files->getClientOriginalExtension();
+            foreach($request->file('imgfile') as $key => $files){
+                $imagefile = $key.time().'.'.$files->getClientOriginalExtension();
               $files->move(public_path('attachments'),$imagefile);
 
               attachments::create([
