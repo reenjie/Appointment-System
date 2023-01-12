@@ -196,7 +196,26 @@ class Edit_Controller extends Controller
 
         return redirect()->route('mail.notify_patient',['email'=>$email,'name'=>$name,'doa'=>$dop,'toa'=>$top,'cname'=>$clinicname,'loc'=>$cliniclocation,'tp' =>'rebook','remarks'=>$request->remarks,'treatment'=>$request->treatment]);
         }else {
-            echo 'User Rebook itself';
+            Appointment::where('id',$id)->update([
+                'dateofappointment'=>null,
+                'timeofappointment'=>null,
+                 'ad_status'=>1,
+                ]);
+
+                $appt = Appointment::where('id',$id)->get();
+                $userid = $appt[0]['user_id'];
+            
+                $adate = $appt[0]['dateofappointment'];
+                $atime = $appt[0]['timeofappointment'];
+                $udetails = User::where('id',$userid)->get();
+                $email = $udetails[0]['email'];
+                $name = $udetails[0]['name'];
+                $clinicdetails = Clinic::where('id',$clinic)->get();
+                $clinicname = $clinicdetails[0]['name'];
+                $cliniclocation =  $clinicdetails[0]['street'].' ,'.$clinicdetails[0]['barangay'].' '.$clinicdetails[0]['city'];
+        
+                return redirect()->route('mail.notify_userrebook',['email'=>$email,'name'=>$name,'doa'=>$dop,'toa'=>$top,'cname'=>$clinicname,'loc'=>$cliniclocation,'tp' =>'rebook','remarks'=>$request->remarks,'treatment'=>$request->treatment]);
+
         }
 
         // // Appointment::where('id',$id)->update([
@@ -238,6 +257,33 @@ class Edit_Controller extends Controller
         return redirect()->route("user.dashboard")->with('accept','Appointment Accepted Successfully');
         
        
+    }
+
+    public function userrebook(Request $request){
+        $id = $request->id;
+        $doctorid = $request->ref;
+        $clinicid = $request->refclinic;
+        $specialization = Doctor::findorFail($doctorid)->category;
+        $dop = $request->dateofappointment;
+        $top = $request->timeofappointment;
+        
+      
+
+      Appointment::where('id',$id)->update([
+        'dateofappointment'=>$dop,
+        'timeofappointment'=>$top,
+        'clinic'=>$clinicid,
+        'category'=>$specialization,
+        'doctor'=>$doctorid,
+        'status'=>1,
+        'ad_status'=>0,
+        'refferedto'=>0,
+        'refferedto_doctor'=>0,
+        'remarks'=>'',
+    ]);
+
+    return redirect()->route("user.dashboard")->with('saveaccept','Appointment Accepted Successfully');
+
     }
 
     public function resend(Request $request){

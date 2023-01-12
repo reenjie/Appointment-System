@@ -27,7 +27,17 @@
         <script>
             swal("Accepted!", "Appointment Accepted successfully!", "success")
         </script>
+
         @endif
+
+        @if(Session::has('saveaccept'))
+        <script>
+            swal("Accepted!", "Appointment Schedule set and  Accepted successfully!", "success")
+        </script>
+
+        @endif
+
+        
 
         <h5>Booking Updates:</h5>
         <div class="row">
@@ -162,22 +172,66 @@
                                                     Appointment Rescheduled</h6>
                                             </div>
                                             <div class="card-body">
+                                                @if($appt->dateofappointment == null && $appt->timeofappointment == null)
+                                               <h6 style="fpnt-weight:bold">Set Your desired Schedule</h6>
+                                                <br>
+                                                <form action="{{route('edit.userrebook')}}" method="post">
+                                                    @csrf
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                  
+                                                            <label for="">Date :</label>
+                                                           @php
+                                                               $date = date('Y-m-d');
+                                                           @endphp
+                                           
+                                                          <input type="date" id="dop" name="dateofappointment" class="authbox mb-2 @error('dateofappointment') is-invalid  @enderror form-control" placeholder="" value="{{old('dateofappointment')}}" autofocus required min="{{date('Y-m-d',strtotime(date("Y-m-d", strtotime($date)) . " +1 day"))}}" >
+                                           
+                                                          <div class="invalid-feedback">
+                                                           <span style="font-size:12px">Please Provide Date or the Date you have entered is already reserved</span>
+                                                          </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                   <label for="">Time :</label>
+                                                                   <input type="time" name="timeofappointment" class="authbox @error('timeofappointment') is-invalid @enderror form-control" placeholder="" value="{{old('timeofappointment')}}" required>
+                                           
+                                                                   <div class="invalid-feedback">
+                                                                     <span style="font-size:12px">Please Provide Time or the Time you have entered is already reserved</span>
+                                                                    </div>
+                                                       </div>
+                                                       <input type="hidden" name="id" value="{{$appt->id}}">
+                                                       
+                                                      <input type="hidden" name="ref" value="{{$appt->refferedto_doctor}}">
+                                                      <input type="hidden" name="patient" value="{{$appt->user_id}}">
+                                                      <input type="hidden" name="refclinic" value="{{$appt->refferedto}}">
+                                                    </div>
+                                                    <button type="submit" class="btn mt-2 btn-primary btn-sm">Set and Accept <i class="fas fa-check-circle"></i></button>
+                                                </form>
+
+                                                @else 
                                                 Date : {{date('F j, Y',strtotime($appt->dateofappointment))}}
 
                                                 <br>
                                                 Time : {{date('h:i a',strtotime($appt->timeofappointment))}}
 
+                                                @endif
+                                              
+
                                             </div>
                                             <div class="card-footer">
                                                 <div class="btn-group">
-                                            
+                                                    
+                                                    @if($appt->dateofappointment == null && $appt->timeofappointment == null)
+                                                 
 
+                                                    @else
                                                     <button data-id="{{$appt->id}}" data-ref="{{$appt->refferedto_doctor}}" data-patient="{{$appt->user_id}}"
                                                         data-refclinic="{{$appt->refferedto}}"
                                                         class="btnaccept btn btn-primary btn-sm" >Accept</button>
 
-                  
                                                     <button data-id="{{$appt->id}}" class="btncancel btn btn-danger btn-sm">Decline</button>
+
+                                                    @endif
 
                                                 </div>
 

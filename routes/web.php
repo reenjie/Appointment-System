@@ -75,7 +75,7 @@ Route::controller(App\Http\Controllers\BookController::class)->group(function(){
 
         Route::get('Cxhasd','checkifexist')->name('checkifexist');
         
-
+     
         
     });
 
@@ -231,6 +231,8 @@ Route::controller(App\Http\Controllers\Actions\Edit_Controller::class)->group(fu
         Route::get('firslogin','firslogin')->name('firslogin');
 
         Route::get('accept_newSchedule','accept_newSchedule')->name('accept_newSchedule');
+
+        Route::post('userrebook','userrebook')->name('userrebook');
     });
 
 
@@ -286,6 +288,8 @@ Route::controller(App\Http\Controllers\MailController::class)->group(function(){
         Route::get('NotifyAdmin_ReceivedFeedback','NotifyAdmin_ReceivedFeedback')->name('NotifyAdmin_ReceivedFeedback');
 
         Route::get('notifylaps','notifylaps')->name('notifylaps');
+
+        Route::get('notify_userrebook','notify_userrebook')->name('notify_userrebook');
     });
 
 

@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('clinic');
             $table->integer('category');
             $table->integer('doctor');
-            $table->date('dateofappointment');
-            $table->time('timeofappointment');
+            $table->date('dateofappointment')->nullable();
+            $table->time('timeofappointment')->nullable();
             $table->integer('status');
             $table->integer('ad_status');
             $table->integer('refferedto');

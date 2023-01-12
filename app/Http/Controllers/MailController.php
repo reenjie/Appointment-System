@@ -910,4 +910,88 @@ class MailController extends Controller
        }   
 
     }
+
+    public function notify_userrebook(Request $request){
+        $email = $request->email;
+        $name  = $request->name;
+
+        
+        $this->token = session()->get('token');
+        $mail = new PHPMailer(true);
+
+       try {
+           $mail->isSMTP();
+           $mail->SMTPDebug = SMTP::DEBUG_OFF;
+           $mail->Host = 'smtp.gmail.com';
+           $mail->Port = 465;
+           $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+           $mail->SMTPAuth = true;
+           $mail->AuthType = 'XOAUTH2';
+           $mail->setOAuth(
+               new OAuth(
+                   [
+                       'provider'          => $this->provider,
+                       'clientId'          => $this->client_id,
+                       'clientSecret'      => $this->client_secret,
+                       'refreshToken'      => $this->token,
+                       'userName'          => session()->get('email')
+                   ]
+               )
+           );
+
+           $mail->setFrom(session()->get('email'),session()->get('e_name'));
+           $mail->addAddress($email,$name);
+           $mail->Subject = 'REBOOK APPOINTMENT SCHEDULE';
+           $mail->CharSet = PHPMailer::CHARSET_UTF8;
+           $body = '<!DOCTYPE html>
+           <html lang="en">
+           
+           <head>
+               <meta charset="UTF-8">
+               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+               <meta http-equiv="X-UA-Compatible" content="ie=edge">
+               <title></title>
+           </head>
+           
+           <body style="background-color: aquamarine;text-align:center">
+           <p><br><br><br></p>
+               <h2><a target="_blank" href="#">Medical Clinic</a></h2>
+           
+               <h3 style="color:rgb(14, 87, 136)">Hi '.$name.'!
+           
+            
+                   </h3>
+                   <h4>Your appointment booking has been referred. and you are requested to rebook your schedule. <br> please login to your account and set your wished schedule. thank you.</h4>
+
+
+                   <br>
+                   <h5>
+                  
+                   
+                       <br>
+                    <span style="color:red">Have a great day.</span>
+                    <br/>
+                       All rights Reserved &middot; 2022
+           
+                   </h5>
+                   <p><br><br><br></p>
+           
+           </body>
+           
+           </html>
+           
+           ';
+           $mail->msgHTML($body);
+           $mail->AltBody = 'This is a plain text message body';
+           if( $mail->send() ) {
+       
+            return redirect()->route('admin.referral');  
+           } else {
+               return redirect()->back()->with('error', 'Unable to send email.');
+           }
+       } catch(Exception $e) {
+           return redirect()->back()->with('error', 'Exception: ' . $e->getMessage());
+       }   
+
+    }
 }
