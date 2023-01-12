@@ -134,6 +134,7 @@ class BookController extends Controller
     }
 
     public function complete_booking(Request $request){
+     
 
       $appt = Appointment::where('id',$request->id)->get();
       $userid = $appt[0]['user_id'];
@@ -151,6 +152,7 @@ class BookController extends Controller
       Appointment::where('id',$request->id)->update([
          'status'=>3,
          'remarks'=>$request->remarks,
+         'diagnostics'=>$request->diagnostics,
          'treatment'=>$request->treatment,
        ]);
        return redirect()->route('mail.notify_patient',['email'=>$email,'name'=>$name,'doa'=>$adate,'toa'=>$atime,'cname'=>$clinicname,'loc'=>$cliniclocation,'tp' =>'completed','remarks'=>$request->remarks,'treatment'=>$request->treatment]);

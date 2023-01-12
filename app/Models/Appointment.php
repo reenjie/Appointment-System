@@ -19,10 +19,12 @@ class Appointment extends Model
         'refferedto',
         'refferedto_doctor',
         'remarks',
+        'diagnostics',
         'treatment',
         'attachedfile',
         'status',
         'ad_status',
+        'laps'
 
     ];
 }

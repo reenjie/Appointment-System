@@ -277,6 +277,8 @@ Route::controller(App\Http\Controllers\MailController::class)->group(function(){
         Route::get('NotifyAdminIfReferredsuccess','NotifyAdmin_ifReferedSuccessful')->name('NotifyAdminIfReferredsuccess');
 
         Route::get('NotifyAdmin_ReceivedFeedback','NotifyAdmin_ReceivedFeedback')->name('NotifyAdmin_ReceivedFeedback');
+
+        Route::get('notifylaps','notifylaps')->name('notifylaps');
     });
 
 

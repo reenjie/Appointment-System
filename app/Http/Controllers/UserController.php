@@ -45,10 +45,12 @@ class UserController extends Controller
                     'refferedto'=>0,
                     'refferedto_doctor'=>0,
                     'remarks'=>'',
+                    'diagnostics'=>'',
                     'treatment'=>'',
                     'attachedfile'=>null,
                     'status'=> 0,
                     'ad_status'=>0,
+                    'laps'=>0,
                 ]);
                 return view('user.dashboard',compact('tab'))->with('Success','Booked Successfully!');
 
@@ -171,10 +173,12 @@ class UserController extends Controller
             'refferedto'=>0,
             'refferedto_doctor'=>0,
             'remarks'=>'',
+            'diagnostics'=>'',
             'treatment'=>'',
             'attachedfile'=>null,
             'status'=> 0,
             'ad_status'=>0,
+            'laps'=>0,
         ]);
         return redirect()->route('user.book')->with('Success','Booked Successfully!'); 
       }

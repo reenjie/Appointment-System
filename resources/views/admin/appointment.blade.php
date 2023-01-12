@@ -99,55 +99,58 @@
         </ul>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-            <div class="container">
-              <table class="table table-striped table-sm " style="font-size:14px">
-                <thead>
-                  <tr class="table-success text-secondary">
-                  <th>Date-Completed</th>
-                  <th>Treatment</th>
-                  <th>Remarks</th>
-    
-                  <th>Doctor</th>
-                  <th>Clinic</th>
-                  </tr>
-                 
-                </thead>
-                <tbody>
-                  @foreach ($completeappt as $apt )
-              
-                  @if($apt->user_id == $row->user_id)
-                  <tr style="font-size: 14px">
-                    <td>{{date("@h:ma F j,Y",strtotime($apt->updated_at))}}</td>
-                    <td>{{$apt->treatment}}</td>
-                    <td>{{$apt->remarks}}</td>
-                    <td>Dr. {{$apt->doctor}}
-                      @foreach ($alldoctor as $dc )
-                          @if($dc->id == $apt->doctor)
-                          {{$dc->firstname." ".$dc->lastname}}
-                          <br>
-                      <span style="font-size: 11px">    {{$dc->email ." | ".$dc->contact}}</span>
-                          @endif
-                      @endforeach
-                    </td>
-                    <td>
-                    @foreach ($allclinic as $icc)
-                    @if($icc->id == $apt->clinic)
-                    {{$icc->name}}
-                    @endif
-                        
-                    @endforeach
-                    </td>
-                  </tr>
-    
-                  @endif
-                 
-              
-                  @endforeach
-                </tbody>
-              </table>
-              
-    
-            </div>
+          <div class="container table-responsive">
+                                            <table class="table table-striped table-sm " style="font-size:14px">
+                                              <thead>
+                                                <tr class="table-success text-secondary">
+                                                <th>Date-Completed</th>
+                                                <th>Diagnostics</th>
+                                                <th>Treatment</th>
+                                                <th>Remarks</th>
+                                  
+                                                <th>Doctor</th>
+                                                <th>Clinic</th>
+                                                </tr>
+                                               
+                                              </thead>
+                                              <tbody>
+                                                @foreach ($completeappt as $apt )
+                                            
+                                                @if($apt->user_id == $row->user_id)
+                                                <tr style="font-size: 14px">
+                                                  <td>{{date("@h:ma F j,Y",strtotime($apt->updated_at))}}</td>
+                                                  <td>{{$apt->diagnostics}}</td>
+                                                  <td>{{$apt->treatment}}</td>
+                                                  <td>{{$apt->remarks}}</td>
+                                                  <td>Dr. {{$apt->doctor}}
+                                                    @foreach ($alldoctor as $dc )
+                                                        @if($dc->id == $apt->doctor)
+                                                        {{$dc->firstname." ".$dc->lastname}}
+                                                        <br>
+                                                    <span style="font-size: 11px">    {{$dc->email ." | ".$dc->contact}}</span>
+                                                        @endif
+                                                    @endforeach
+                                                  </td>
+                                                  <td>
+                                                  @foreach ($allclinic as $icc)
+                                                  @if($icc->id == $apt->clinic)
+                                                  {{$icc->name}}
+                                                  @endif
+                                                      
+                                                  @endforeach
+                                                  </td>
+                                                </tr>
+                                  
+                                                @endif
+                                               
+                                            
+                                                @endforeach
+                                              </tbody>
+                                            </table>
+                                            
+                                  
+                                          </div>
+                                  
     
 
 

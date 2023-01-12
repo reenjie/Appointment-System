@@ -36,11 +36,29 @@ class AdminController extends Controller
        return view('admin.dashboard',compact('tab','appt','clinicsName','Doctor','Appointment','Patients','Clinic','category','data','user','feedback','refer'));
     }
     public function appointment(){
+
         $id = Auth::user()->clinic;
         $cli = Clinic::where('id',$id)->get();
         $clinicsName =  $cli[0]['name'];
+        $datenow = date('Y-m-d');
         $data = Appointment::where('clinic',$id)->where('status',0)->get();
+        $datawexpiry = DB::select('select * from appointments  where clinic = '.$id.' and status = 0 and  "'.$datenow.'" > dateofappointment;');
+        
+      if(count($datawexpiry)>=1){
+       foreach ($datawexpiry as $key => $value) {
       
+        if($datenow > $value->dateofappointment){
+            if($value->laps == 0){
+              $userd = [];
+              $getuser = User::findorFail($value->user_id);
+              return redirect()->route('mail.notifylaps',['appt_id'=>$id,'userid'=>$getuser->id,'email'=>$getuser->email,'name'=>$getuser->name]);
+            }
+        
+        }
+      }
+      }
+   
+
         $Doctor = Doctor::where('clinic',$id)->get();  
         $completeappt = Appointment::where('status',3)->get();
         $alldoctor = Doctor::all();
@@ -48,12 +66,12 @@ class AdminController extends Controller
         $user = User::all();
         $tab = 'appointment';
 
-        /* 
-          $completeappt = Appointment::where('status',3)->get();
-        $alldoctor = Doctor::all();
-        $allclinic = Clinic::all();
-        'completeappt','alldoctor','allclinic'
-        */
+        // /* 
+        //   $completeappt = Appointment::where('status',3)->get();
+        // $alldoctor = Doctor::all();
+        // $allclinic = Clinic::all();
+        // 'completeappt','alldoctor','allclinic'
+        // */
         return view('admin.appointment',compact('tab','data','Doctor','user','clinicsName','completeappt','alldoctor','allclinic'));
     }
     public function patient(){

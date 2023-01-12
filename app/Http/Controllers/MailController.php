@@ -823,4 +823,9 @@ class MailController extends Controller
       }
       return redirect()->back(); 
     }
+
+
+    public function notifylaps(Request $request){
+        dd($request);
+    }
 }

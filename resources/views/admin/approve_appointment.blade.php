@@ -71,6 +71,10 @@
                                     @endif
                                 @endforeach
                                 </h6>
+
+                                <br>
+                                <h6 style="font-weight: normal;font-size:12px" class="af mb-2">-- Diagnostics --</h6>
+                                <textarea name="diagnostics" class="form-control" id="{{$row->id}}diagnostics" cols="30" rows="5"></textarea>
                                 <br>
                                 <h6 style="font-weight: normal;font-size:12px" class="af mb-2">Medical Certificate</h6>
                                 @php
@@ -154,11 +158,12 @@ Attach file
                                       </ul>
                                       <div class="tab-content" id="myTabContent">
                                         <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                                          <div class="container">
+                                        <div class="container table-responsive">
                                             <table class="table table-striped table-sm " style="font-size:14px">
                                               <thead>
                                                 <tr class="table-success text-secondary">
                                                 <th>Date-Completed</th>
+                                                <th>Diagnostics</th>
                                                 <th>Treatment</th>
                                                 <th>Remarks</th>
                                   
@@ -173,6 +178,7 @@ Attach file
                                                 @if($apt->user_id == $row->user_id)
                                                 <tr style="font-size: 14px">
                                                   <td>{{date("@h:ma F j,Y",strtotime($apt->updated_at))}}</td>
+                                                  <td>{{$apt->diagnostics}}</td>
                                                   <td>{{$apt->treatment}}</td>
                                                   <td>{{$apt->remarks}}</td>
                                                   <td>Dr. {{$apt->doctor}}
@@ -203,6 +209,7 @@ Attach file
                                             
                                   
                                           </div>
+                                  
                                   
                               
                               
@@ -418,6 +425,7 @@ $('.clearattach').click(function(){
         var id = $(this).data('id');
         var val = $('#'+id+'remarks').val();
         var treat = $('#'+id+'treatment').val();
+        var diagnostics = $('#'+id+'diagnostics').val();
        if(val == '' && treat == ''){
         $('#'+id+'remarks').addClass('is-invalid');
         $('#'+id+'treatment').addClass('is-invalid');
@@ -426,7 +434,7 @@ $('.clearattach').click(function(){
        }else if(val == '') {
         $('#'+id+'remarks').addClass('is-invalid');
        }else{
-        window.location.href='{{route("home.complete_booking")}}'+'?id='+id+'&remarks='+val+'&treatment='+treat;
+        window.location.href='{{route("home.complete_booking")}}'+'?id='+id+'&remarks='+val+'&treatment='+treat+'&diagnostics='+diagnostics;
        }
     })
 
